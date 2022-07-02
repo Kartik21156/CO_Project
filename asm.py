@@ -200,36 +200,36 @@ def conversion(inp,reg,addr):
 
     ###         E
     elif (inp[0]=='jmp'):
-        op = key('jmp')
-        mam = addr.get(inp[1])
-        im = intToBi(int(mam))
-        z = "00000000" + im
-        im1 = z[len(z) - 8:len(z)]
-        print(E(op, im1))
+        opc = key('jmp')
+        maddr = addr.get(inp[1])
+        imm = intToBi(int(maddr))
+        oup = "00000000" + imm
+        imm1 = oup[len(oup) - 8:len(oup)]
+        print(E(opc, imm1))
 
     elif (inp[0]=='jlt'):
-        op = key('jlt')
-        mam = addr.get(inp[1])
-        im = intToBi(int(mam))
-        z = "00000000" + im
-        im1 = z[len(z) - 8:len(z)]
-        print(E(op, im1))
+        opc = key('jlt')
+        maddr = addr.get(inp[1])
+        imm = intToBi(int(maddr))
+        oup = "00000000" + imm
+        imm1 = oup[len(oup) - 8:len(oup)]
+        print(E(opc, imm1))
 
     elif (inp[0]=='jgt'):
-        op = key('jgt')
-        mam = addr.get(inp[1])
-        im = intToBi(int(mam))
-        z = "00000000" + im
-        im1 = z[len(z) - 8:len(z)]
-        print(E(op, im1))
+        opc = key('jgt')
+        maddr = addr.get(inp[1])
+        imm = intToBi(int(maddr))
+        oup = "00000000" + imm
+        imm1 = oup[len(oup) - 8:len(oup)]
+        print(E(opc, imm1))
 
     elif (inp[0]=='je'):
-        op = key('je')
-        mam = addr.get(inp[1])
-        im = intToBi(int(mam))
-        z = "00000000" + im
-        im1 = z[len(z) - 8:len(z)]
-        print(E(op, im1))
+        opc = key('je')
+        maddr = addr.get(inp[1])
+        imm = intToBi(int(maddr))
+        oup = "00000000" + imm
+        imm1 = oup[len(oup) - 8:len(oup)]
+        print(E(opc, imm1))
 
     ###         F
     elif (inp[0]=="hlt"):

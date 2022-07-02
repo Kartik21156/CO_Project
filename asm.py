@@ -3,6 +3,7 @@
 
 
 #opcodes
+from atexit import register
 from audioop import add
 from multiprocessing.sharedctypes import Value
 
@@ -83,6 +84,7 @@ def key(val):
 
 ####
 def conversion(inp,reg,addr):
+    ####        A
     if(inp[0]=="add"):
         opc = key("add")
         r1 = reg.get(inp[1])
@@ -90,60 +92,44 @@ def conversion(inp,reg,addr):
         r3 = reg.get(inp[3])
         print(A(opc,r1,r2,r3))
     
-    elif():
-        pass
-
-    elif (inp[0] == "sub"):
+    elif (inp[0]=="sub"):
         opc = key("sub")
         r1 = reg.get(inp[1])
         r2 = reg.get(inp[2])
         r3 = reg.get(inp[3])
         print(A(opc, r1, r2, r3))
 
-    elif():
-        pass
-
-    elif (inp[0] == "mul"):
+    elif (inp[0]=="mul"):
         opc = key("mul")
         r1 = reg.get(inp[1])
         r2 = reg.get(inp[2])
         r3 = reg.get(inp[3])
         print(A(opc, r1, r2, r3))
 
-    elif():
-        pass
-
-    elif (inp[0] == "xor"):
+    elif (inp[0]=="xor"):
         opc = key("xor")
         r1 = reg.get(inp[1])
         r2 = reg.get(inp[2])
         r3 = reg.get(inp[3])
         print(A(opc, r1, r2, r3))
 
-    elif():
-        pass
-
-    elif (inp[0] == "or"):
+    elif (inp[0]=="or"):
         opc = key("or")
         r1 = reg.get(inp[1])
         r2 = reg.get(inp[2])
         r3 = reg.get(inp[3])
         print(A(opc, r1, r2, r3))
 
-    elif():
-        pass
-
-    elif (inp[0] == "and"):
+    elif (inp[0]=="and"):
         opc = key("and")
         r1 = reg.get(inp[1])
         r2 = reg.get(inp[2])
         r3 = reg.get(inp[3])
         print(A(opc, r1, r2, r3))
 
-    elif():
-        pass
-
-    elif (inp[0] == "mov"):
+    ###                 B
+    ####        mov Imm and mov Reg
+    elif (inp[0]=="mov"):
         if ("$" in inp[2]):
             opc = "10010"
             r1 = reg.get(inp[1])
@@ -153,18 +139,98 @@ def conversion(inp,reg,addr):
             print(B(opc, r1, im1))
 
         else:
-            op = "10011"
+            opc = "10011"
             r1 = reg.get(inp[1])
             r2 = reg.get(inp[2])
-            print(C(op, r1, r2))
+            print(C(opc, r1, r2))
 
-    elif():
-        pass
+    elif (inp[0]=="rs"):
+        opc = key("rs")
+        r1 = reg.get(inp[1])
+        imm = intToBi(int(inp[2][1:len(inp[2])]))
+        oup = "00000000" + imm
+        im1 = oup[len(oup) - 8:len(oup)]
+        print(B(opc, r1, im1))
 
+    elif (inp[0]=="ls"):
+        opc = key("ls")
+        r1 = reg.get(oup[1])
+        imm = intToBi(int(oup[2][1:len(oup[2])]))
+        oup = "00000000" + imm
+        imm1 = oup[len(oup) - 8:len(oup)]
+        print(B(opc, r1, imm1))
     
+    ###             C
+    elif(inp[0]=="div"):
+        opc = key("div")
+        r3 = reg.get(inp[1])
+        r4 = reg.get(inp[2])
+        print(C(opc,r3,r4))
 
+    elif (inp[0]=='not'):
+        opc = key('not')
+        r1 = reg.get(inp[1])
+        r2 = reg.get(inp[2])
+        print(C(opc, r1, r2))
 
+    elif (inp[0]=='cmp'):
+        opc = key('cmp')
+        r1 = reg.get(inp[1])
+        r2 = reg.get(inp[2])
+        print(C(opc, r1, r2))
 
+    ###         D
+    elif (inp[0] == 'ld'):
+        opc = key('ld')
+        r1 = reg.get(inp[1])
+        maddr = addr.get(inp[2])
+        imm = intToBi(int(maddr))
+        oup = "00000000" + imm
+        imm1 = oup[len(oup) - 8:len(oup)]
+        print(D(opc, r1, imm1))
 
+    elif (inp[0] == 'st'):
+        opc = key('st')
+        r1 = reg.get(inp[1])
+        maddr = addr.get(inp[2])
+        imm = intToBi(int(maddr))
+        oup = "00000000" + imm
+        imm1 = oup[len(oup) - 8:len(oup)]
+        print(D(opc, r1, imm1))
 
+    ###         E
+    elif (inp[0]=='jmp'):
+        op = key('jmp')
+        mam = addr.get(inp[1])
+        im = intToBi(int(mam))
+        z = "00000000" + im
+        im1 = z[len(z) - 8:len(z)]
+        print(E(op, im1))
 
+    elif (inp[0]=='jlt'):
+        op = key('jlt')
+        mam = addr.get(inp[1])
+        im = intToBi(int(mam))
+        z = "00000000" + im
+        im1 = z[len(z) - 8:len(z)]
+        print(E(op, im1))
+
+    elif (inp[0]=='jgt'):
+        op = key('jgt')
+        mam = addr.get(inp[1])
+        im = intToBi(int(mam))
+        z = "00000000" + im
+        im1 = z[len(z) - 8:len(z)]
+        print(E(op, im1))
+
+    elif (inp[0]=='je'):
+        op = key('je')
+        mam = addr.get(inp[1])
+        im = intToBi(int(mam))
+        z = "00000000" + im
+        im1 = z[len(z) - 8:len(z)]
+        print(E(op, im1))
+
+    ###         F
+    elif (inp[0]=="hlt"):
+        print(F())

@@ -3,10 +3,6 @@
 
 
 #opcodes
-from atexit import register
-from audioop import add
-from multiprocessing.sharedctypes import Value
-
 
 opcode = {"10000":"add",           #A
         "10001":"sub",             #A
@@ -234,3 +230,85 @@ def conversion(inp,reg,addr):
     ###         F
     elif (inp[0]=="hlt"):
         print(F())
+
+    ###         FOR LABELS!!!
+
+    ###             A
+    elif (inp[0][-1]==":" and inp[1]=='add'):
+        print(A(key("add"),reg.get(inp[2]),reg.get(inp[3]),reg.get(inp[4])))
+
+    elif (inp[0][-1]==":" and inp[1]=='sub'):
+        print(A(key("sub"),reg.get(inp[2]),reg.get(inp[3]),reg.get(inp[4])))
+
+    elif (inp[0][-1]==":" and inp[1]=='mul'):
+        print(A(key("mul"),reg.get(inp[2]),reg.get(inp[3]),reg.get(inp[4])))
+
+    elif (inp[0][-1]==":" and inp[1]=='xor'):
+        print(A(key("xor"),reg.get(inp[2]),reg.get(inp[3]),reg.get(inp[4])))
+
+    elif (inp[0][-1]==":" and inp[1]=='or'):
+        print(A(key("or"),reg.get(inp[2]),reg.get(inp[3]),reg.get(inp[4])))
+
+    elif (inp[0][-1]==":" and inp[1]=='and'):
+        print(A(key("and"),reg.get(inp[2]),reg.get(inp[3]),reg.get(inp[4])))
+
+    ###             B
+
+    ###         mov Imm & mov reg
+    elif (inp[0][-1] == ":" and inp[1] == "mov"):
+        if ("$" in inp[3]):
+            imm = intToBi(int(inp[3][1:len(inp[3])]))
+            oup = "00000000" + imm
+            imm1 = oup[len(oup) - 8:len(oup)]
+            print(B("00010",reg.get(inp[2]), imm1))
+
+        else:
+            print(C("00011",reg.get(inp[2]),reg.get(inp[3])))
+
+    elif (inp[0][-1] == ":" and inp[0] == "rs"):
+        imm = intToBi(int(inp[3][1:len(inp[3])]))
+        oup = "00000000" + imm
+        imm1 = oup[len(oup) - 8:len(oup)]
+        print(B(key("rs"),reg.get(inp[2]), imm1))
+
+    elif (inp[0][-1] == ":" and inp[0] == "ls"):
+        imm = intToBi(int(inp[3][1:len(inp[3])]))
+        oup = "00000000" + imm
+        imm1 = oup[len(oup) - 8:len(oup)]
+        print(B(key("ls"),reg.get(inp[2]), imm1))
+
+    ###             C
+    elif (inp[0][-1] == ':' and inp[1] == "div"):
+        print(C(key('div'),reg.get(inp[2]),reg.get(inp[3])))
+
+    elif (inp[0][-1] == ':' and inp[1] == "not"):
+        print(C(key('not'),reg.get(inp[2]),reg.get(inp[3])))
+
+    elif (inp[0][-1] == ':' and inp[1] == "cmp"):
+        print(C(key('cmp'),reg.get(inp[2]),reg.get(inp[3])))
+
+    ###             D
+    elif (inp[0][-1] == ':' and inp[1] == "ld"):
+        mam = addr.get(inp[3])
+        im = intToBi(int(mam))
+        z = "00000000" + im
+        im1 = z[len(z) - 8:len(z)]
+        print(D(key('ld'),reg.get(inp[2]), im1))
+
+    elif (inp[0][-1] == ':' and inp[1] == "st"):
+        mam = addr.get(inp[3])
+        im = intToBi(int(mam))
+        z = "00000000" + im
+        im1 = z[len(z) - 8:len(z)]
+        print(D(key('st'),reg.get(inp[2]), im1))
+
+    ###             E
+
+
+
+    ###             F
+    elif(inp[0][-1]==":" and inp[1]=="hlt"):
+        print(F())
+
+def codeChk():
+    pass

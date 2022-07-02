@@ -1,8 +1,6 @@
 import sys
 #reading the input file
 
-
-
 #opcodes
 
 opcode = {"10000":"add",           #A
@@ -38,8 +36,6 @@ reg = {"R0":"000",
 
 #semantics for instructions
 
-###
-
 #A(add sub mul xor or and)
 def A(opc,r1,r2,r3):
     return opc + "00" + r1 + r2 + r3       #5+3+3+3 = 14
@@ -64,10 +60,6 @@ def E(opc,addr):
 def F():
     return "0101000000000000"               #5
 
-###
-
-#-#
-
 def intToBi(x):
     bi = bin(x)
     bi = bi.replace("0b","")
@@ -78,8 +70,8 @@ def key(val):
         if val == Value:
             return key
 
-
 ####
+
 def conversion(inp,reg,addr):
     ####        A
     if(inp[0]=="add"):

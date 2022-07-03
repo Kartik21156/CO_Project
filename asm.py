@@ -34,6 +34,12 @@ reg = {"R0":"000",
     "R6":"110",
     "FLAGS":"111", }
 
+def codeChk(inp,opcode,reg,addr,i):
+    pass
+
+
+
+
 #semantics for instructions
 
 #A(add sub mul xor or and)
@@ -316,5 +322,3 @@ def conversion(inp,reg,addr):
     elif(inp[0][-1]==":" and inp[1]=="hlt"):
         print(F())
 
-def codeChk():
-    pass

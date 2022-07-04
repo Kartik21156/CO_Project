@@ -81,46 +81,22 @@ def key(val):
 def conversion(inp,reg,addr):
     ####        A
     if(inp[0]=="add"):
-        opc = key("add")
-        r1 = reg.get(inp[1])
-        r2 = reg.get(inp[2])
-        r3 = reg.get(inp[3])
-        print(A(opc,r1,r2,r3))
+        print(A(key("add"),reg.get(inp[1]),reg.get(inp[2]),reg.get(inp[3])))
     
     elif (inp[0]=="sub"):
-        opc = key("sub")
-        r1 = reg.get(inp[1])
-        r2 = reg.get(inp[2])
-        r3 = reg.get(inp[3])
-        print(A(opc, r1, r2, r3))
+        print(A(key("sub"),reg.get(inp[1]),reg.get(inp[2]),reg.get(inp[3])))
 
     elif (inp[0]=="mul"):
-        opc = key("mul")
-        r1 = reg.get(inp[1])
-        r2 = reg.get(inp[2])
-        r3 = reg.get(inp[3])
-        print(A(opc, r1, r2, r3))
+        print(A(key("mul"),reg.get(inp[1]),reg.get(inp[2]),reg.get(inp[3])))
 
     elif (inp[0]=="xor"):
-        opc = key("xor")
-        r1 = reg.get(inp[1])
-        r2 = reg.get(inp[2])
-        r3 = reg.get(inp[3])
-        print(A(opc, r1, r2, r3))
+        print(A(key("xor"),reg.get(inp[1]),reg.get(inp[2]),reg.get(inp[3])))
 
     elif (inp[0]=="or"):
-        opc = key("or")
-        r1 = reg.get(inp[1])
-        r2 = reg.get(inp[2])
-        r3 = reg.get(inp[3])
-        print(A(opc, r1, r2, r3))
+        print(A(key("or"),reg.get(inp[1]),reg.get(inp[2]),reg.get(inp[3])))
 
     elif (inp[0]=="and"):
-        opc = key("and")
-        r1 = reg.get(inp[1])
-        r2 = reg.get(inp[2])
-        r3 = reg.get(inp[3])
-        print(A(opc, r1, r2, r3))
+        print(A(key("and"),reg.get(inp[1]),reg.get(inp[2]),reg.get(inp[3])))
 
     ###                 B
     ####        mov Imm and mov Reg

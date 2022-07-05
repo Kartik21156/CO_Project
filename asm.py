@@ -120,10 +120,10 @@ def conversion(inp,reg,addr):
     elif (inp[0][-1]==":" and inp[1]=="mov"):
         if ("$" in inp[3]):
             oup = "00000000" + intToBi(int(inp[3][1:len(inp[3])]))
-            print(B("00010",reg.get(inp[2]), oup[len(oup) - 8:len(oup)]))
+            print(B("10010",reg.get(inp[2]), oup[len(oup) - 8:len(oup)]))
 
         else:
-            print(C("00011",reg.get(inp[2]),reg.get(inp[3])))
+            print(C("10011",reg.get(inp[2]),reg.get(inp[3])))
 
     ###             B
     elif (inp[0][-1]==":" and inp[0] in B1):
@@ -460,7 +460,7 @@ for i in range(len(inpt)):
         hltv = False
 
     if inpt[i][0][-1] == ":":       #appending labels for chk
-        addr[inpt[0][0:-1]] = i - c_start
+        addr[inpt[i][0][0:-1]] = i - c_start
         variables.append(inpt[i][0][0:-1])
 
 for i in range(c_start,len(inpt)):

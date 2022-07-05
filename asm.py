@@ -1,4 +1,5 @@
 from audioop import add
+from operator import le
 import sys
 
 #opcodes
@@ -512,8 +513,6 @@ def codeChk(inp,opcode,reg,addr,i):
         else:
             return False
 
-
-
 inpt = []
 variables = []
 c_start = 0
@@ -541,7 +540,16 @@ for i in range(len(inpt)):          #appending and skipping to variables
         addr[inpt[0][0:-1]] = i - c_start
         variables.append(inpt[i][0][0:-1])
 
-# codeChk(inpt,opcode,reg,addr)
+for i in range(c_start,len(inpt)):
+    if inpt[i][0] == 'var':
+        print("VAR not defined at starting : ",i+1)
+
+if inpt[len(inpt)-1] != 'hlt':
+    print("LAST INSTRUCTION NOT HLT")
+    
+
+for i in range(len(inpt)):
+    codeChk(inpt,opcode,reg,addr)
 
 if code == True:
     for i in range(len(inpt)):

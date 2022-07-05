@@ -254,7 +254,7 @@ for i in range(len(inpt)):          #appending and skipping to variables
         c_start = i
         break
 
-    if inpt[i][0][-1] == ":":       #appending labels for chking
+    if inpt[i][0][-1] == ":":       #appending labels for chk
         addr[inpt[0][0:-1]] = i - c_start
         variables.append(inpt[i][0][0:-1])
 

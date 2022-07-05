@@ -1,5 +1,8 @@
+from asyncio import FastChildWatcher
+from audioop import add
 import sys
-#reading the input file
+from tkinter.messagebox import RETRY
+from turtle import rt
 
 #opcodes
 
@@ -34,11 +37,14 @@ reg = {"R0":"000",
     "R6":"110",
     "FLAGS":"111", }
 
-def codeChk(inp,opcode,reg,addr,i):
-    pass
+A = ('add','sub','mul','xor','or','and')
+B = ('rs','ls')
+C = ('not','cmp','div')
 
-
-
+def key(val):
+    for key, value in opcode.items():
+        if val == value:
+            return key
 
 #semantics for instructions
 
@@ -71,13 +77,6 @@ def intToBi(x):
     bi = bi.replace("0b","")
     return x
 
-def key(val):
-    for key, Value in opcode.items():
-        if val == Value:
-            return key
-
-####
-
 def conversion(inp,reg,addr):
     ####        A
     if(inp[0]=="add"):
@@ -98,109 +97,59 @@ def conversion(inp,reg,addr):
     elif (inp[0]=="and"):
         print(A(key("and"),reg.get(inp[1]),reg.get(inp[2]),reg.get(inp[3])))
 
-    ###                 B
     ####        mov Imm and mov Reg
     elif (inp[0]=="mov"):
         if ("$" in inp[2]):
-            opc = "10010"
-            r1 = reg.get(inp[1])
-            imm = intToBi(int(inp[2][1:len(inp[2])]))
-            pr = "00000000" + imm
-            im1 = pr[len(pr) - 8:len(pr)]
-            print(B(opc, r1, im1))
+            pr = "00000000" + intToBi(int(inp[2][1:len(inp[2])]))
+            print(B("10010",reg.get(inp[1]),pr[len(pr) - 8:len(pr)]))
 
         else:
-            opc = "10011"
-            r1 = reg.get(inp[1])
-            r2 = reg.get(inp[2])
-            print(C(opc, r1, r2))
+            print(C("10011",reg.get(inp[1]),reg.get(inp[2])))
 
+    ###                 B
     elif (inp[0]=="rs"):
-        opc = key("rs")
-        r1 = reg.get(inp[1])
-        imm = intToBi(int(inp[2][1:len(inp[2])]))
-        oup = "00000000" + imm
-        im1 = oup[len(oup) - 8:len(oup)]
-        print(B(opc, r1, im1))
+        oup = "00000000" + intToBi(int(inp[2][1:len(inp[2])]))
+        print(B(key("rs"),reg.get(inp[1]),oup[len(oup) - 8:len(oup)]))
 
     elif (inp[0]=="ls"):
-        opc = key("ls")
-        r1 = reg.get(oup[1])
-        imm = intToBi(int(oup[2][1:len(oup[2])]))
-        oup = "00000000" + imm
-        imm1 = oup[len(oup) - 8:len(oup)]
-        print(B(opc, r1, imm1))
+        oup = "00000000" + intToBi(int(oup[2][1:len(oup[2])]))
+        print(B(key("ls"),reg.get(oup[1]),oup[len(oup) - 8:len(oup)]))
     
     ###             C
     elif(inp[0]=="div"):
-        opc = key("div")
-        r3 = reg.get(inp[1])
-        r4 = reg.get(inp[2])
-        print(C(opc,r3,r4))
+        print(C(key("div"),reg.get(inp[1]),reg.get(inp[2])))
 
     elif (inp[0]=='not'):
-        opc = key('not')
-        r1 = reg.get(inp[1])
-        r2 = reg.get(inp[2])
-        print(C(opc, r1, r2))
+        print(C(key('not'),reg.get(inp[1]),reg.get(inp[2])))
 
     elif (inp[0]=='cmp'):
-        opc = key('cmp')
-        r1 = reg.get(inp[1])
-        r2 = reg.get(inp[2])
-        print(C(opc, r1, r2))
+        print(C(key('cmp'),reg.get(inp[1]),reg.get(inp[2])))
 
     ###         D
     elif (inp[0]=='ld'):
-        opc = key('ld')
-        r1 = reg.get(inp[1])
-        maddr = addr.get(inp[2])
-        imm = intToBi(int(maddr))
-        oup = "00000000" + imm
-        imm1 = oup[len(oup) - 8:len(oup)]
-        print(D(opc, r1, imm1))
+        oup = "00000000" + intToBi(int(addr.get(inp[2])))
+        print(D(key('ld'),reg.get(inp[1]),oup[len(oup) - 8:len(oup)]))
 
     elif (inp[0]=='st'):
-        opc = key('st')
-        r1 = reg.get(inp[1])
-        maddr = addr.get(inp[2])
-        imm = intToBi(int(maddr))
-        oup = "00000000" + imm
-        imm1 = oup[len(oup) - 8:len(oup)]
-        print(D(opc, r1, imm1))
+        oup = "00000000" + intToBi(int(addr.get(inp[2])))
+        print(D(key('st'),reg.get(inp[1]),oup[len(oup) - 8:len(oup)]))
 
     ###         E
     elif (inp[0]=='jmp'):
-        opc = key('jmp')
-        maddr = addr.get(inp[1])
-        imm = intToBi(int(maddr))
-        oup = "00000000" + imm
-        imm1 = oup[len(oup) - 8:len(oup)]
-        print(E(opc, imm1))
+        oup = "00000000" + intToBi(int(addr.get(inp[1])))
+        print(E(key('jmp'),oup[len(oup) - 8:len(oup)]))
 
     elif (inp[0]=='jlt'):
-        opc = key('jlt')
-        maddr = addr.get(inp[1])
-        imm = intToBi(int(maddr))
-        oup = "00000000" + imm
-        imm1 = oup[len(oup) - 8:len(oup)]
-        print(E(opc, imm1))
+        oup = "00000000" + intToBi(int(addr.get(inp[1])))
+        print(E(key('jlt'),oup[len(oup) - 8:len(oup)]))
 
     elif (inp[0]=='jgt'):
-        opc = key('jgt')
-        maddr = addr.get(inp[1])
-        imm = intToBi(int(maddr))
-        oup = "00000000" + imm
-        imm1 = oup[len(oup) - 8:len(oup)]
-        print(E(opc, imm1))
+        oup = "00000000" + intToBi(int(addr.get(inp[1])))
+        print(E(key('jgt'),oup[len(oup) - 8:len(oup)]))
 
     elif (inp[0]=='je'):
-        opc = key('je')
-        maddr = addr.get(inp[1])
-        imm = intToBi(int(maddr))
-        oup = "00000000" + imm
-        imm1 = oup[len(oup) - 8:len(oup)]
-        print(E(opc, imm1))
+        oup = "00000000" + intToBi(int(addr.get(inp[1])))
+        print(E(key('je'),oup[len(oup) - 8:len(oup)]))
 
     ###         F
     elif (inp[0]=="hlt"):
@@ -227,30 +176,23 @@ def conversion(inp,reg,addr):
     elif (inp[0][-1]==":" and inp[1]=='and'):
         print(A(key("and"),reg.get(inp[2]),reg.get(inp[3]),reg.get(inp[4])))
 
-    ###             B
-
     ###         mov Imm & mov reg
     elif (inp[0][-1]==":" and inp[1]=="mov"):
         if ("$" in inp[3]):
-            imm = intToBi(int(inp[3][1:len(inp[3])]))
-            oup = "00000000" + imm
-            imm1 = oup[len(oup) - 8:len(oup)]
-            print(B("00010",reg.get(inp[2]), imm1))
+            oup = "00000000" + intToBi(int(inp[3][1:len(inp[3])]))
+            print(B("00010",reg.get(inp[2]), oup[len(oup) - 8:len(oup)]))
 
         else:
             print(C("00011",reg.get(inp[2]),reg.get(inp[3])))
 
+    ###             B
     elif (inp[0][-1]==":" and inp[0]=="rs"):
-        imm = intToBi(int(inp[3][1:len(inp[3])]))
-        oup = "00000000" + imm
-        imm1 = oup[len(oup) - 8:len(oup)]
-        print(B(key("rs"),reg.get(inp[2]), imm1))
+        oup = "00000000" + intToBi(int(inp[3][1:len(inp[3])]))
+        print(B(key("rs"),reg.get(inp[2]),oup[len(oup) - 8:len(oup)]))
 
     elif (inp[0][-1]==":" and inp[0]=="ls"):
-        imm = intToBi(int(inp[3][1:len(inp[3])]))
-        oup = "00000000" + imm
-        imm1 = oup[len(oup) - 8:len(oup)]
-        print(B(key("ls"),reg.get(inp[2]), imm1))
+        oup = "00000000" + intToBi(int(inp[3][1:len(inp[3])]))
+        print(B(key("ls"),reg.get(inp[2]),oup[len(oup) - 8:len(oup)]))
 
     ###             C
     elif (inp[0][-1]==':' and inp[1]=="div"):
@@ -264,37 +206,177 @@ def conversion(inp,reg,addr):
 
     ###             D
     elif (inp[0][-1]==':' and inp[1]=="ld"):
-        maddr = addr.get(inp[3])
-        oup = "00000000" + intToBi(int(maddr))
+        oup = "00000000" + intToBi(int(addr.get(inp[3])))
         print(D(key('ld'),reg.get(inp[2]),oup[len(oup) - 8:len(oup)]))
 
     elif (inp[0][-1]==':' and inp[1]=="st"):
-        maddr = addr.get(inp[3])
-        oup = "00000000" + intToBi(int(maddr))
+        oup = "00000000" + intToBi(int(addr.get(inp[3])))
         print(D(key('st'),reg.get(inp[2]),oup[len(oup) - 8:len(oup)]))
 
     ###             E
     elif (inp[0][-1]==':' and inp[1]=='jmp'):
-        maddr = addr.get(inp[2])
-        oup = "00000000" + intToBi(int(maddr))
+        oup = "00000000" + intToBi(int(addr.get(inp[2])))
         print(E(key('jmp'),oup[len(oup) - 8:len(oup)]))
 
     elif (inp[0][-1]==':' and inp[1]=='jlt'):
-        maddr = addr.get(inp[2])
-        oup = "00000000" + intToBi(int(maddr))
+        oup = "00000000" + intToBi(int(addr.get(inp[2])))
         print(E(key('jlt'),oup[len(oup) - 8:len(oup)]))
 
     elif (inp[0][-1]==':' and inp[1]=='jgt'):
-        maddr = addr.get(inp[2])
-        oup = "00000000" + intToBi(int(maddr))
+        oup = "00000000" + intToBi(int(addr.get(inp[2])))
         print(E(key('jgt'),oup[len(oup) - 8:len(oup)]))
 
     elif (inp[0][-1]==':' and inp[1]=='je'):
-        maddr = addr.get(inp[2])
-        oup = "00000000" + intToBi(int(maddr))
+        oup = "00000000" + intToBi(int(addr.get(inp[2])))
         print(E(key('je'),oup[len(oup) - 8:len(oup)]))
 
     ###             F
     elif(inp[0][-1]==":" and inp[1]=="hlt"):
         print(F())
 
+inpt = []
+variables = []
+c_start = 0
+addr = {}
+max_val = 255
+min_val = 0
+code = True
+
+#reading the input file
+temp = sys.stdin.read().splitlines()
+for i in range(len(temp)):
+    inpt.append(temp[i].split(" "))
+
+for i in range(len(inpt)):          #appending and skipping to variables
+    if inpt[i][0] == "var":
+        if len(inpt[i]) == 2:
+            addr[inpt[i][1]] = len(inpt)-c_start+i
+            variables.append(inpt[i][1])
+
+    if inpt[i][0] != "var":
+        c_start = i
+        break
+
+    if inpt[i][0][-1] == ":":       #appending labels for chk
+        addr[inpt[0][0:-1]] = i - c_start
+        variables.append(inpt[i][0][0:-1])
+
+# codeChk(inpt,opcode,reg,addr)
+
+if code == True:
+    for i in range(len(inpt)):
+        conversion(inpt[i],opcode,reg,addr)
+
+
+
+
+def codeChk(inp,opcode,reg,addr,i):
+    if inp[0][-1] != ":":
+        #variables
+        if inp[0] not in opcode.values():
+            if inp[0] == "var":
+                if len(inp) == "2":
+                    if (inp[1] >= max_val):
+                        print("Variable value greater than supported val on line : ",i+1)
+                        return False
+                    elif (inp[1] <= min_val):
+                        print("Variable value smaller than supported val on line : ",i+1)
+                        return False
+                    return True
+                else:
+                    print("Error in Variable declaration on line : ",i+1)
+                    return False
+
+        #Flags
+        elif ("FLAGS" in inp):
+            if (inp[0] == "mov"):
+                if len(inp) == 3:
+                    if inp[2] in reg.keys():
+                        return True
+            else:
+                print("ILLEGAL USE OF FLAG REGISTOR ON LINE : ",i+1)
+                return False
+
+        #               A
+        elif (inp[0] in A):
+            if len(inp) != 4:
+                print("SYNTAX ERROR : ",i+1)
+                return False
+            elif len(inp) == 4:
+                if inp[1] not in reg.keys():
+                    print("INVALID REGISTER",i+1)
+                    return False
+                if inp[2] not in reg.keys():
+                    print("INVALID REGISTER",i+1)
+                    return False
+                if inp[3] not in reg.keys():
+                    print("INVALID REGISTER",i+1)
+                    return False
+            else:
+                return True
+
+        #               mov
+        elif (inp[0] == 'mov'):
+            if len(inp) != 3:
+                print("SNYTAX ERROR",i+1)
+                return False
+            else:
+                if inp[2][0] == '$':
+                    if (int(inp[2][1:len(inp[2])]) > 255):
+                        print("IMMEDIATE VALUE SURPASSED")
+                        return False
+                    elif (int(inp[2][1:len(inp[2])]) < 0):
+                        print("IMMEDIATE VALUE SUBCEEDED")
+                        return False
+                    elif inp[1] not in reg.keys():
+                        print("INVALID REGISTER",i+1)
+                        return False
+                    else:
+                        return True
+                    
+                elif inp[1] in reg.keys():
+                    if inp[2] not in reg.keys():
+                        print("INVALID REGISTER",i+1)
+                        return False
+                    else:
+                        return True
+                
+                else:
+                    print("ERROR ON LINE : ",i+1)
+                    return False
+                
+        #               B
+        elif (inp[0] in B):
+            if len(inp) != 3:
+                print("SYNTAX ERROR", i+1)
+                return False
+            elif inp[1] not in reg.keys():
+                print("INVALID REGISTER")
+                return False
+            elif inp[2][0] != '$':
+                print("INVALID IMMEDIATE VALUE")
+                return False
+            elif (int(inp[2][1:len(inp[2])]) > 255):
+                print("IMMEDIATE VALUE SURPASSED")
+                return False
+            elif (int(inp[2][1:len(inp[2])]) < 0):
+                print("IMMEDIATE VALUE SUBCEEDED")
+                return False
+            else:
+                return True
+
+        #               C
+        elif (inp[0] in C):
+            if len(inp) != 3:
+                print("SYNTAX ERROR",i+1)
+                return False
+            elif inp[1] not in reg.keys():
+                print("INVALID REGISTER")
+                return False
+            elif inp[2] not in reg.keys():
+                print("INVALID REGISTER")
+                return False
+            else:
+                return True
+
+        #               Db

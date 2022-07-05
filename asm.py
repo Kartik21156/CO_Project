@@ -178,26 +178,20 @@ def conversion(inp,reg,addr):
     ###         mov Imm & mov reg
     elif (inp[0][-1]==":" and inp[1]=="mov"):
         if ("$" in inp[3]):
-            imm = intToBi(int(inp[3][1:len(inp[3])]))
-            oup = "00000000" + imm
-            imm1 = oup[len(oup) - 8:len(oup)]
-            print(B("00010",reg.get(inp[2]), imm1))
+            oup = "00000000" + intToBi(int(inp[3][1:len(inp[3])]))
+            print(B("00010",reg.get(inp[2]), oup[len(oup) - 8:len(oup)]))
 
         else:
             print(C("00011",reg.get(inp[2]),reg.get(inp[3])))
 
     ###             B
     elif (inp[0][-1]==":" and inp[0]=="rs"):
-        imm = intToBi(int(inp[3][1:len(inp[3])]))
-        oup = "00000000" + imm
-        imm1 = oup[len(oup) - 8:len(oup)]
-        print(B(key("rs"),reg.get(inp[2]), imm1))
+        oup = "00000000" + intToBi(int(inp[3][1:len(inp[3])]))
+        print(B(key("rs"),reg.get(inp[2]),oup[len(oup) - 8:len(oup)]))
 
     elif (inp[0][-1]==":" and inp[0]=="ls"):
-        imm = intToBi(int(inp[3][1:len(inp[3])]))
-        oup = "00000000" + imm
-        imm1 = oup[len(oup) - 8:len(oup)]
-        print(B(key("ls"),reg.get(inp[2]), imm1))
+        oup = "00000000" + intToBi(int(inp[3][1:len(inp[3])]))
+        print(B(key("ls"),reg.get(inp[2]),oup[len(oup) - 8:len(oup)]))
 
     ###             C
     elif (inp[0][-1]==':' and inp[1]=="div"):
@@ -211,34 +205,28 @@ def conversion(inp,reg,addr):
 
     ###             D
     elif (inp[0][-1]==':' and inp[1]=="ld"):
-        maddr = addr.get(inp[3])
-        oup = "00000000" + intToBi(int(maddr))
+        oup = "00000000" + intToBi(int(addr.get(inp[3])))
         print(D(key('ld'),reg.get(inp[2]),oup[len(oup) - 8:len(oup)]))
 
     elif (inp[0][-1]==':' and inp[1]=="st"):
-        maddr = addr.get(inp[3])
-        oup = "00000000" + intToBi(int(maddr))
+        oup = "00000000" + intToBi(int(addr.get(inp[3])))
         print(D(key('st'),reg.get(inp[2]),oup[len(oup) - 8:len(oup)]))
 
     ###             E
     elif (inp[0][-1]==':' and inp[1]=='jmp'):
-        maddr = addr.get(inp[2])
-        oup = "00000000" + intToBi(int(maddr))
+        oup = "00000000" + intToBi(int(addr.get(inp[2])))
         print(E(key('jmp'),oup[len(oup) - 8:len(oup)]))
 
     elif (inp[0][-1]==':' and inp[1]=='jlt'):
-        maddr = addr.get(inp[2])
-        oup = "00000000" + intToBi(int(maddr))
+        oup = "00000000" + intToBi(int(addr.get(inp[2])))
         print(E(key('jlt'),oup[len(oup) - 8:len(oup)]))
 
     elif (inp[0][-1]==':' and inp[1]=='jgt'):
-        maddr = addr.get(inp[2])
-        oup = "00000000" + intToBi(int(maddr))
+        oup = "00000000" + intToBi(int(addr.get(inp[2])))
         print(E(key('jgt'),oup[len(oup) - 8:len(oup)]))
 
     elif (inp[0][-1]==':' and inp[1]=='je'):
-        maddr = addr.get(inp[2])
-        oup = "00000000" + intToBi(int(maddr))
+        oup = "00000000" + intToBi(int(addr.get(inp[2])))
         print(E(key('je'),oup[len(oup) - 8:len(oup)]))
 
     ###             F

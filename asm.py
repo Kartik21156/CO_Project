@@ -379,5 +379,4 @@ def codeChk(inp,opcode,reg,addr,i):
             else:
                 return True
 
-        #               D
-        
+        #               Db

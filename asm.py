@@ -114,7 +114,7 @@ def conversion(inp,reg,addr):
 
     ###             A
     elif (inp[0][-1]==":" and inp[1] in A1):
-        print(A(key(inp[0]),reg.get(inp[2]),reg.get(inp[3]),reg.get(inp[4])))
+        print(A(key(inp[1]),reg.get(inp[2]),reg.get(inp[3]),reg.get(inp[4])))
 
     ###         mov Imm & mov reg
     elif (inp[0][-1]==":" and inp[1]=="mov"):
@@ -128,21 +128,21 @@ def conversion(inp,reg,addr):
     ###             B
     elif (inp[0][-1]==":" and inp[0] in B1):
         oup = "00000000" + intToBi(int(inp[3][1:len(inp[3])]))
-        print(B(key(inp[0]),reg.get(inp[2]),oup[len(oup) - 8:len(oup)]))
+        print(B(key(inp[1]),reg.get(inp[2]),oup[len(oup) - 8:len(oup)]))
 
     ###             C
     elif (inp[0][-1]==':' and inp[1] in C):
-        print(C(key(inp[0]),reg.get(inp[2]),reg.get(inp[3])))
+        print(C(key(inp[1]),reg.get(inp[2]),reg.get(inp[3])))
 
     ###             D
     elif (inp[0][-1]==':' and inp[1] in D1):
         oup = "00000000" + intToBi(int(addr.get(inp[3])))
-        print(D(key(inp[0]),reg.get(inp[2]),oup[len(oup) - 8:len(oup)]))
+        print(D(key(inp[1]),reg.get(inp[2]),oup[len(oup) - 8:len(oup)]))
 
     ###             E
     elif (inp[0][-1]==':' and inp[1] in E1):
         oup = "00000000" + intToBi(int(addr.get(inp[2])))
-        print(E(key(inp[0]),oup[len(oup) - 8:len(oup)]))
+        print(E(key(inp[1]),oup[len(oup) - 8:len(oup)]))
 
     ###             F
     elif(inp[0][-1]==":" and inp[1]=="hlt"):

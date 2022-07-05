@@ -269,6 +269,7 @@ if code == True:
 
 
 
+
 def codeChk(inp,opcode,reg,addr,i):
     if inp[0][-1] != ":":
         #variables
@@ -416,4 +417,146 @@ def codeChk(inp,opcode,reg,addr,i):
 
         #               LABELS
     else:
+        #variables
+        if inp[0] not in opcode.values():
+            if inp[0] == "var":
+                if len(inp) == "2":
+                    if (inp[1] >= max_val):
+                        print("Variable value greater than supported val on line : ",i+1)
+                        return False
+                    elif (inp[1] <= min_val):
+                        print("Variable value smaller than supported val on line : ",i+1)
+                        return False
+                    return True
+                else:
+                    print("Error in Variable declaration on line : ",i+1)
+                    return False
+
+        #Flags
+        elif ("FLAGS" in inp):
+            if (inp[0] == "mov"):
+                if len(inp) == 3:
+                    if inp[2] in reg.keys():
+                        return True
+            else:
+                print("ILLEGAL USE OF FLAG REGISTOR ON LINE : ",i+1)
+                return False
+
+        #               A
+        elif (inp[0] in A):
+            if len(inp) != 4:
+                print("SYNTAX ERROR : ",i+1)
+                return False
+            elif len(inp) == 4:
+                if inp[1] not in reg.keys():
+                    print("INVALID REGISTER",i+1)
+                    return False
+                if inp[2] not in reg.keys():
+                    print("INVALID REGISTER",i+1)
+                    return False
+                if inp[3] not in reg.keys():
+                    print("INVALID REGISTER",i+1)
+                    return False
+            else:
+                return True
+
+        #               mov
+        elif (inp[0] == 'mov'):
+            if len(inp) != 3:
+                print("SNYTAX ERROR",i+1)
+                return False
+            else:
+                if inp[2][0] == '$':
+                    if (int(inp[2][1:len(inp[2])]) > 255):
+                        print("IMMEDIATE VALUE SURPASSED")
+                        return False
+                    elif (int(inp[2][1:len(inp[2])]) < 0):
+                        print("IMMEDIATE VALUE SUBCEEDED")
+                        return False
+                    elif inp[1] not in reg.keys():
+                        print("INVALID REGISTER",i+1)
+                        return False
+                    else:
+                        return True
+                    
+                elif inp[1] in reg.keys():
+                    if inp[2] not in reg.keys():
+                        print("INVALID REGISTER",i+1)
+                        return False
+                    else:
+                        return True
+                
+                else:
+                    print("ERROR ON LINE : ",i+1)
+                    return False
+                
+        #               B
+        elif (inp[0] in B):
+            if len(inp) != 3:
+                print("SYNTAX ERROR", i+1)
+                return False
+            elif inp[1] not in reg.keys():
+                print("INVALID REGISTER")
+                return False
+            elif inp[2][0] != '$':
+                print("INVALID IMMEDIATE VALUE")
+                return False
+            elif (int(inp[2][1:len(inp[2])]) > 255):
+                print("IMMEDIATE VALUE SURPASSED")
+                return False
+            elif (int(inp[2][1:len(inp[2])]) < 0):
+                print("IMMEDIATE VALUE SUBCEEDED")
+                return False
+            else:
+                return True
+
+        #               C
+        elif (inp[0] in C):
+            if len(inp) != 3:
+                print("SYNTAX ERROR",i+1)
+                return False
+            elif inp[1] not in reg.keys():
+                print("INVALID REGISTER")
+                return False
+            elif inp[2] not in reg.keys():
+                print("INVALID REGISTER")
+                return False
+            else:
+                return True
+
+        #               D
+        elif (inp[0] in D):
+            if len(inp) != 3:
+                print("SYNTAX ERROR",i+1)
+                return False
+            elif inp[1] not in reg.keys():
+                print("INVALID REGISTER",i+1)
+                return False
+            elif inp[2] not in reg.keys():
+                print("INVALID REGISTER",i+1)
+            
+            else:
+                return True
         
+        #               E
+        elif (inp[0] in E):
+            if len[inp] != 2:
+                print("SYNTAX ERROR",i+1)
+                return False
+            elif inp[1] not in addr.keys():
+                print("INVALID MEM ADDR",i+1)
+                return False
+            else:
+                return True
+            
+        #               F
+        elif (inp[0] == "hlt"):
+            if len(inp) != 1:
+                print("SYNTAX ERROR ",i+1)
+                return False
+            else:
+                return True
+        
+        else:
+            return False
+

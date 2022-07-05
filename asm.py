@@ -96,38 +96,23 @@ def conversion(inp,reg,addr):
     elif (inp[0]=="and"):
         print(A(key("and"),reg.get(inp[1]),reg.get(inp[2]),reg.get(inp[3])))
 
-    ###                 B
     ####        mov Imm and mov Reg
     elif (inp[0]=="mov"):
         if ("$" in inp[2]):
-            opc = "10010"
-            r1 = reg.get(inp[1])
-            imm = intToBi(int(inp[2][1:len(inp[2])]))
-            pr = "00000000" + imm
-            im1 = pr[len(pr) - 8:len(pr)]
-            print(B(opc, r1, im1))
+            pr = "00000000" + intToBi(int(inp[2][1:len(inp[2])]))
+            print(B("10010",reg.get(inp[1]),pr[len(pr) - 8:len(pr)]))
 
         else:
-            opc = "10011"
-            r1 = reg.get(inp[1])
-            r2 = reg.get(inp[2])
-            print(C(opc, r1, r2))
+            print(C("10011",reg.get(inp[1]),reg.get(inp[2])))
 
+    ###                 B
     elif (inp[0]=="rs"):
-        opc = key("rs")
-        r1 = reg.get(inp[1])
-        imm = intToBi(int(inp[2][1:len(inp[2])]))
-        oup = "00000000" + imm
-        im1 = oup[len(oup) - 8:len(oup)]
-        print(B(opc, r1, im1))
+        oup = "00000000" + intToBi(int(inp[2][1:len(inp[2])]))
+        print(B(key("rs"),reg.get(inp[1]),oup[len(oup) - 8:len(oup)]))
 
     elif (inp[0]=="ls"):
-        opc = key("ls")
-        r1 = reg.get(oup[1])
-        imm = intToBi(int(oup[2][1:len(oup[2])]))
-        oup = "00000000" + imm
-        imm1 = oup[len(oup) - 8:len(oup)]
-        print(B(opc, r1, imm1))
+        oup = "00000000" + intToBi(int(oup[2][1:len(oup[2])]))
+        print(B(key("ls"),reg.get(oup[1]),oup[len(oup) - 8:len(oup)]))
     
     ###             C
     elif(inp[0]=="div"):

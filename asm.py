@@ -232,6 +232,7 @@ variables = []
 c_start = 0
 addr = {}
 max_val = 255
+min_val = 0
 code = True
 
 #reading the input file
@@ -263,13 +264,16 @@ if code == True:
 
 
 def codeChk(inp,opcode,reg,addr,i):
-    #variables
     if inp[0][-1] != ":":
+        #variables
         if inp[0] not in opcode.values():
             if inp[0] == "var":
                 if len(inp) == "2":
-                    if inp[1] >= max_val:
+                    if (inp[1] >= max_val):
                         print("Variable value greater than supported val on line : ",i+1)
+                        return False
+                    elif (inp[1] <= min_val):
+                        print("Variable value smaller than supported val on line : ",i+1)
                         return False
                     return True
                 else:
@@ -285,4 +289,3 @@ def codeChk(inp,opcode,reg,addr,i):
                 print("ILLEGAL USE OF FLAG REGISTOR ON LINE : ",i+1)
                 return False
         #               A
-        

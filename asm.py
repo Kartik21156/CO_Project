@@ -275,5 +275,14 @@ def codeChk(inp,opcode,reg,addr,i):
                 else:
                     print("Error in Variable declaration on line : ",i+1)
                     return False
-    #Flags
-    
+        #Flags
+        elif ("FLAGS" in inp):
+            if (inp[0] == "mov"):
+                if len(inp) == 3:
+                    if inp[2] in reg.keys():
+                        return True
+            else:
+                print("ILLEGAL USE OF FLAG REGISTOR ON LINE : ",i+1)
+                return False
+        #               A
+        

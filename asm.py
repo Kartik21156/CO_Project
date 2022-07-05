@@ -34,7 +34,15 @@ reg = {"R0":"000",
     "R6":"110",
     "FLAGS":"111", }
 
+def key(val):
+    for key, value in opcode.items():
+        if val == value:
+            return key
+
 def codeChk(inp,opcode,reg,addr,i):
+    if inp[0][-1] != ":":
+        if y[0] not in opcode.values():
+
     pass
 
 
@@ -70,11 +78,6 @@ def intToBi(x):
     bi = bin(x)
     bi = bi.replace("0b","")
     return x
-
-def key(val):
-    for key, Value in opcode.items():
-        if val == Value:
-            return key
 
 def conversion(inp,reg,addr):
     ####        A

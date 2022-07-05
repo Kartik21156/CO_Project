@@ -1,8 +1,5 @@
 #opcodes
 
-from tkinter.ttk import LabeledScale
-
-
 opcode = {"10000":"add",           #A
         "10001":"sub",             #A
         "10010":"mov",             #B mov imm
@@ -77,8 +74,10 @@ def intToBi(x):
     return bi
 
 def conversion(inp,reg,addr):
+    if inp[0] in labels:
+        pass
     ####        A
-    if inp[0] in A1:
+    elif inp[0] in A1:
         print(A(key(inp[0]),reg.get(inp[1]),reg.get(inp[2]),reg.get(inp[3])))
 
     ####        mov Imm and mov Reg
@@ -134,7 +133,7 @@ def conversion(inp,reg,addr):
         print(B(key(inp[1]),reg.get(inp[2]),oup[len(oup) - 8:len(oup)]))
 
     ###             C
-    elif (inp[0][-1]==':' and inp[1] in C):
+    elif (inp[0][-1]==':' and inp[1] in C1):
         print(C(key(inp[1]),reg.get(inp[2]),reg.get(inp[3])))
 
     ###             D
@@ -153,10 +152,10 @@ def conversion(inp,reg,addr):
 
 def codeChk(inp,opcode,reg,addr,i):
     if inp[0][-1] != ":":
-        
-        if inp[0] not in opcode.values():
-            print("SYNTAX ERROR : ",i+1)
-            return False
+        if inp[0] != 'var':
+            if inp[0] not in opcode.values():
+                print("SYNTAX ERROR : ",i+1)
+                return False
 
         #variables
         if inp[0] == "var":
@@ -170,9 +169,6 @@ def codeChk(inp,opcode,reg,addr,i):
                 else:
                     print("Error in Variable declaration on line : ",i+1)
                     return False
-            else:
-                print("Error in Variable declaration on line : ",i+1)
-                return False
 
         #Flags
         elif ("FLAGS" in inp):
@@ -447,6 +443,7 @@ code = True
 
 #reading the input file
 import fileinput
+from operator import le
 
 for line in fileinput.input():
     line = line.strip('\n')
@@ -468,27 +465,80 @@ for i in range(len(inpt)):          #appending variables
         addr[inpt[i][0][0:-1]] = i - c_start
         labels.append(inpt[i][0][0:-1])
 
-for i in range(len(inpt)): 
-    if (inpt[i][0] == 'hltv' and i != len(inpt-1)):
+for i in range(len(inpt)):          #HLT CHK
+    if (inpt[i][0] == 'hltv' and i != len(inpt-1)):     
         print("HLT NOT AT LAST",i+1)
         hltv = False
         exit()
 
-if inpt[len(inpt)-1][0] != 'hlt':
+if inpt[len(inpt)-1][0] != 'hlt':       #HLT CHK
     print("LAST INSTRUCTION IS NOT HLT")
     hltv = False
     exit()
 
-for i in range(c_start,len(inpt)):
+for i in range(c_start,len(inpt)):      #VAR AT START
     if inpt[i][0] == 'var':
         print("VAR not defined at starting : ",i+1)
         code = False
         exit()
 
-for i in range(len(variables)):
+for i in range(len(variables)):         # 2 SAME VAR
     if variables.count(variables[i]) >1:
+        print("MORE THAN 1 VARIABLES WITH SAME NAME")
         code = False
         exit()
+
+for i in range(c_start,len(inpt)):      #TYPO in instructions and undefined labels
+    if inpt[i][0][-1] == ":":
+        if inpt[i][1] not in opcode.values():
+            print("SYNTAX ERROR ",i+1)
+            code = False
+            exit()
+    
+    elif inpt[i][0] in opcode.values():
+        pass
+    else:
+        if inpt[i][0] not in opcode.values():
+            if inpt[i][0][0:-1] not in labels:
+                print("USE OF UNDEFIINED LABELS",i+1)
+                code = False
+                exit()
+            else:
+                print("SYNTAX ERROR ",i+1)
+                code = False
+                exit()
+
+        elif inpt[i][0][0:-1] not in labels:
+            print("USE OF UNDEFIINED LABELS",i+1)
+            code = False
+            exit()
+
+for i in range(len(inpt)):                      #undefined var
+    if inpt[i][0][-1] == ":":
+        if inpt[i][1] in D1:
+            if inpt[i][3] not in variables:
+                print("USE OF UNDECLARED VARIABLE",i+1)
+                code = False
+                exit()
+        elif inpt[i][1] in E1:
+            if inpt[i][2] not in variables:
+                print("USE OF UNDECLARED VARIABLE",i+1)
+                code = False
+                exit()
+    else:
+        if inpt[i][0] in D1:
+            if inpt[i][2] not in variables:
+                    print("USE OF UNDECLARED VARIABLE",i+1)
+                    code = False
+                    exit()
+        elif inpt[i][0] in E1:
+            if inpt[i][1] not in variables:
+                print("USE OF UNDECLARED VARIABLE",i+1)
+                code = False
+                exit()
+
+
+
 
 
 if code == True:

@@ -1,5 +1,8 @@
 #opcodes
 
+from tkinter.ttk import LabeledScale
+
+
 opcode = {"10000":"add",           #A
         "10001":"sub",             #A
         "10010":"mov",             #B mov imm
@@ -429,6 +432,7 @@ def codeChk(inp,opcode,reg,addr,i):
 
 inpt = []
 variables = []
+labels = []
 c_start = 0
 addr = {}
 max_val = 255
@@ -444,24 +448,25 @@ for line in fileinput.input():
     line = line.split()
     inpt.append(line)
 
-for i in range(len(inpt)): 
+for i in range(len(inpt)):          #skipping to variables
     if inpt[i][0] != "var":
         c_start = i
         break
 
-for i in range(len(inpt)):          #appending and skipping to variables
+for i in range(len(inpt)):          #appending variables
     if inpt[i][0] == "var":
         if len(inpt[i]) == 2:
             addr[inpt[i][1]] = len(inpt)-c_start+i
             variables.append(inpt[i][1])
 
+    if inpt[i][0][-1] == ":":       #appending labels for chk
+        addr[inpt[i][0][0:-1]] = i - c_start
+        labels.append(inpt[i][0][0:-1])
+
 for i in range(len(inpt)): 
     if (inpt[i][0] == 'hltv' and i != len(inpt-1)):
         hltv = False
 
-    if inpt[i][0][-1] == ":":       #appending labels for chk
-        addr[inpt[i][0][0:-1]] = i - c_start
-        variables.append(inpt[i][0][0:-1])
 
 for i in range(c_start,len(inpt)):
     if inpt[i][0] == 'var':

@@ -1,5 +1,8 @@
+from asyncio import FastChildWatcher
 from audioop import add
 import sys
+from tkinter.messagebox import RETRY
+from turtle import rt
 
 #opcodes
 
@@ -33,6 +36,10 @@ reg = {"R0":"000",
     "R5":"101",
     "R6":"110",
     "FLAGS":"111", }
+
+A = ('add','sub','mul','xor','or','and')
+B = ('rs','ls')
+C = ('not','cmp','div')
 
 def key(val):
     for key, value in opcode.items():
@@ -279,6 +286,7 @@ def codeChk(inp,opcode,reg,addr,i):
                 else:
                     print("Error in Variable declaration on line : ",i+1)
                     return False
+
         #Flags
         elif ("FLAGS" in inp):
             if (inp[0] == "mov"):
@@ -288,4 +296,88 @@ def codeChk(inp,opcode,reg,addr,i):
             else:
                 print("ILLEGAL USE OF FLAG REGISTOR ON LINE : ",i+1)
                 return False
+
         #               A
+        elif (inp[0] in A):
+            if len(inp) != 4:
+                print("SYNTAX ERROR : ",i+1)
+                return False
+            elif len(inp) == 4:
+                if inp[1] not in reg.keys():
+                    print("INVALID REGISTER",i+1)
+                    return False
+                if inp[2] not in reg.keys():
+                    print("INVALID REGISTER",i+1)
+                    return False
+                if inp[3] not in reg.keys():
+                    print("INVALID REGISTER",i+1)
+                    return False
+            else:
+                return True
+
+        #               mov
+        elif (inp[0] == 'mov'):
+            if len(inp) != 3:
+                print("SNYTAX ERROR",i+1)
+                return False
+            else:
+                if inp[2][0] == '$':
+                    if (int(inp[2][1:len(inp[2])]) > 255):
+                        print("IMMEDIATE VALUE SURPASSED")
+                        return False
+                    elif (int(inp[2][1:len(inp[2])]) < 0):
+                        print("IMMEDIATE VALUE SUBCEEDED")
+                        return False
+                    elif inp[1] not in reg.keys():
+                        print("INVALID REGISTER",i+1)
+                        return False
+                    else:
+                        return True
+                    
+                elif inp[1] in reg.keys():
+                    if inp[2] not in reg.keys():
+                        print("INVALID REGISTER",i+1)
+                        return False
+                    else:
+                        return True
+                
+                else:
+                    print("ERROR ON LINE : ",i+1)
+                    return False
+                
+        #               B
+        elif (inp[0] in B):
+            if len(inp) != 3:
+                print("SYNTAX ERROR", i+1)
+                return False
+            elif inp[1] not in reg.keys():
+                print("INVALID REGISTER")
+                return False
+            elif inp[2][0] != '$':
+                print("INVALID IMMEDIATE VALUE")
+                return False
+            elif (int(inp[2][1:len(inp[2])]) > 255):
+                print("IMMEDIATE VALUE SURPASSED")
+                return False
+            elif (int(inp[2][1:len(inp[2])]) < 0):
+                print("IMMEDIATE VALUE SUBCEEDED")
+                return False
+            else:
+                return True
+
+        #               C
+        elif (inp[0] in C):
+            if len(inp) != 3:
+                print("SYNTAX ERROR",i+1)
+                return False
+            elif inp[1] not in reg.keys():
+                print("INVALID REGISTER")
+                return False
+            elif inp[2] not in reg.keys():
+                print("INVALID REGISTER")
+                return False
+            else:
+                return True
+
+        #               D
+        

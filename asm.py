@@ -438,7 +438,6 @@ addr = {}
 max_val = 255
 min_val = 0
 code = True
-hltv = True
 
 #reading the input file
 import fileinput
@@ -465,30 +464,22 @@ for i in range(len(inpt)):          #appending variables
 
 for i in range(len(inpt)): 
     if (inpt[i][0] == 'hltv' and i != len(inpt-1)):
+        print("HLT NOT AT LAST",i+1)
         hltv = False
 
+if inpt[len(inpt)-1][0] != 'hlt':
+    print("LAST INSTRUCTION IS NOT HLT")
+    hltv = False
 
 for i in range(c_start,len(inpt)):
     if inpt[i][0] == 'var':
         print("VAR not defined at starting : ",i+1)
-
-if inpt[len(inpt)-1][0] != 'hlt':
-    print("LAST INSTRUCTION NOT HLT")
-    hltv = False
-
-var_C = True
+        code = False
 
 for i in range(len(variables)):
     if variables.count(variables[i]) >1:
-        var_C = False
+        code = False
 
-# for i in range(len(inpt)):
-#     if codeChk(inpt,opcode,reg,addr,i) == True:
-#         if hltv == True:
-#             print("HLT NOT LAST COMMAND")
-#             break
-#     else:
-#         code = False
 
 
 if code == True:

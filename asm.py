@@ -39,14 +39,6 @@ def key(val):
         if val == value:
             return key
 
-def codeChk(inp,opcode,reg,addr,i):
-    if inp[0][-1] != ":":
-        if inp[0] not in opcode.values():
-            
-
-
-
-
 #semantics for instructions
 
 #A(add sub mul xor or and)
@@ -239,6 +231,7 @@ inpt = []
 variables = []
 c_start = 0
 addr = {}
+max_val = 255
 code = True
 
 #reading the input file
@@ -260,8 +253,26 @@ for i in range(len(inpt)):          #appending and skipping to variables
         addr[inpt[0][0:-1]] = i - c_start
         variables.append(inpt[i][0][0:-1])
 
-codeChk(inpt,opcode,reg,addr)
+# codeChk(inpt,opcode,reg,addr)
 
 if code == True:
     for i in range(len(inpt)):
         conversion(inpt[i],opcode,reg,addr)
+
+
+
+
+def codeChk(inp,opcode,reg,addr,i):
+    #variables
+    if inp[0][-1] != ":":
+        if inp[0] not in opcode.values():
+            if inp[0] == "var":
+                if len(inp) == "2":
+                    if inp[1] >= max_val:
+                        print("Variable value greater than supported val on line : ",i+1)
+                        return False
+                    return True
+                else:
+                    print("Error in Variable declaration on line : ",i+1)
+                    return False
+    #Flags

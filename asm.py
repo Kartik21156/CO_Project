@@ -1,5 +1,3 @@
-import sys
-
 #opcodes
 
 opcode = {"10000":"add",           #A
@@ -520,9 +518,11 @@ min_val = 0
 code = True
 
 #reading the input file
-temp = sys.stdin.read().splitlines()
-for i in range(len(temp)):
-    inpt.append(temp[i].split(" "))
+import fileinput
+
+for line in fileinput.input():
+    inpt.append(line)
+
 
 for i in range(len(inpt)):          #appending and skipping to variables
     if inpt[i][0] == "var":
@@ -555,8 +555,9 @@ for i in range(len(variables)):
         var_C = False
 
 for i in range(len(inpt)):
-    if codeChk(inpt,opcode,reg,addr) == True:
+    if codeChk(inpt,opcode,reg,addr,i) == True:
         if hltv == True:
+            print("HLT NOT LAST COMMAND")
             break
     else:
         code = False

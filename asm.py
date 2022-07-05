@@ -321,9 +321,7 @@ for i in range(len(inpt)):          #appending and skipping to variables
         addr[inpt[0][0:-1]] = i - c_start
         variables.append(inpt[i][0][0:-1])
 
-
-
-
+codeChk(inpt,opcode,reg,addr)
 
 if code == True:
     for i in range(len(inpt)):

@@ -153,20 +153,26 @@ def conversion(inp,reg,addr):
 
 def codeChk(inp,opcode,reg,addr,i):
     if inp[0][-1] != ":":
-        #variables
+        
         if inp[0] not in opcode.values():
-            if inp[0] == "var":
-                if len(inp) == "2":
-                    if (inp[1] >= max_val):
-                        print("Variable value greater than supported val on line : ",i+1)
-                        return False
-                    elif (inp[1] <= min_val):
-                        print("Variable value smaller than supported val on line : ",i+1)
-                        return False
-                    return True
+            print("SYNTAX ERROR : ",i+1)
+            return False
+
+        #variables
+        if inp[0] == "var":
+            if len(inp) == "2":
+                if (inp[1] >= max_val):
+                    print("Variable value greater than supported val on line : ",i+1)
+                    return False
+                elif (inp[1] <= min_val):
+                    print("Variable value smaller than supported val on line : ",i+1)
+                    return False
                 else:
                     print("Error in Variable declaration on line : ",i+1)
                     return False
+            else:
+                print("Error in Variable declaration on line : ",i+1)
+                return False
 
         #Flags
         elif ("FLAGS" in inp):
@@ -296,10 +302,10 @@ def codeChk(inp,opcode,reg,addr,i):
         else:
             return False
 
-        #               LABELS
+        #               labels
     else:
         if inp[1] not in opcode.values():
-            print("SYNTAX ERROR")
+            print("SYNTAX ERROR : ",i+1)
             return False
 
         #                  Flags
@@ -466,26 +472,28 @@ for i in range(len(inpt)):
     if (inpt[i][0] == 'hltv' and i != len(inpt-1)):
         print("HLT NOT AT LAST",i+1)
         hltv = False
+        exit()
 
 if inpt[len(inpt)-1][0] != 'hlt':
     print("LAST INSTRUCTION IS NOT HLT")
     hltv = False
+    exit()
 
 for i in range(c_start,len(inpt)):
     if inpt[i][0] == 'var':
         print("VAR not defined at starting : ",i+1)
         code = False
+        exit()
 
 for i in range(len(variables)):
     if variables.count(variables[i]) >1:
         code = False
-
+        exit()
 
 
 if code == True:
-    if var_C == True:
-        for i in range(len(inpt)):
-            conversion(inpt[i],reg,addr)
+    for i in range(len(inpt)):
+        conversion(inpt[i],reg,addr)
 
 
 

@@ -398,11 +398,22 @@ def codeChk(inp,opcode,reg,addr,i):
                 print("SYNTAX ERROR",i+1)
                 return False
             elif inp[1] not in addr.keys():
-                print("INVALID MEM ADDR")
+                print("INVALID MEM ADDR",i+1)
                 return False
             else:
                 return True
             
         #               F
+        elif (inp[0] == "hlt"):
+            if len(inp) != 1:
+                print("SYNTAX ERROR ",i+1)
+                return False
+            else:
+                return True
         
+        else:
+            return False
 
+        #               LABELS
+    else:
+        

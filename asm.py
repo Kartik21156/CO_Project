@@ -544,16 +544,29 @@ for i in range(c_start,len(inpt)):
     if inpt[i][0] == 'var':
         print("VAR not defined at starting : ",i+1)
 
+hltv = True
+
 if inpt[len(inpt)-1] != 'hlt':
     print("LAST INSTRUCTION NOT HLT")
-    
+    hltv = False
+
+var_C = True
+
+for i in range(len(variables)):
+    if variables.count(variables[i]) >1:
+        var_C = False
 
 for i in range(len(inpt)):
-    codeChk(inpt,opcode,reg,addr)
-
+    if codeChk(inpt,opcode,reg,addr) == True:
+        if hltv == True:
+            break
+    else:
+        code = False
+    
 if code == True:
-    for i in range(len(inpt)):
-        conversion(inpt[i],opcode,reg,addr)
+    if var_C == True:
+        for i in range(len(inpt)):
+            conversion(inpt[i],opcode,reg,addr)
 
 
 

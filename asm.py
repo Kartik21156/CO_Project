@@ -126,55 +126,29 @@ def conversion(inp,reg,addr):
 
     ###         D
     elif (inp[0]=='ld'):
-        opc = key('ld')
-        r1 = reg.get(inp[1])
-        maddr = addr.get(inp[2])
-        imm = intToBi(int(maddr))
-        oup = "00000000" + imm
-        imm1 = oup[len(oup) - 8:len(oup)]
-        print(D(opc, r1, imm1))
+        oup = "00000000" + intToBi(int(addr.get(inp[2])))
+        print(D(key('ld'),reg.get(inp[1]),oup[len(oup) - 8:len(oup)]))
 
     elif (inp[0]=='st'):
-        opc = key('st')
-        r1 = reg.get(inp[1])
-        maddr = addr.get(inp[2])
-        imm = intToBi(int(maddr))
-        oup = "00000000" + imm
-        imm1 = oup[len(oup) - 8:len(oup)]
-        print(D(opc, r1, imm1))
+        oup = "00000000" + intToBi(int(addr.get(inp[2])))
+        print(D(key('st'),reg.get(inp[1]),oup[len(oup) - 8:len(oup)]))
 
     ###         E
     elif (inp[0]=='jmp'):
-        opc = key('jmp')
-        maddr = addr.get(inp[1])
-        imm = intToBi(int(maddr))
-        oup = "00000000" + imm
-        imm1 = oup[len(oup) - 8:len(oup)]
-        print(E(opc, imm1))
+        oup = "00000000" + intToBi(int(addr.get(inp[1])))
+        print(E(key('jmp'),oup[len(oup) - 8:len(oup)]))
 
     elif (inp[0]=='jlt'):
-        opc = key('jlt')
-        maddr = addr.get(inp[1])
-        imm = intToBi(int(maddr))
-        oup = "00000000" + imm
-        imm1 = oup[len(oup) - 8:len(oup)]
-        print(E(opc, imm1))
+        oup = "00000000" + intToBi(int(addr.get(inp[1])))
+        print(E(key('jlt'),oup[len(oup) - 8:len(oup)]))
 
     elif (inp[0]=='jgt'):
-        opc = key('jgt')
-        maddr = addr.get(inp[1])
-        imm = intToBi(int(maddr))
-        oup = "00000000" + imm
-        imm1 = oup[len(oup) - 8:len(oup)]
-        print(E(opc, imm1))
+        oup = "00000000" + intToBi(int(addr.get(inp[1])))
+        print(E(key('jgt'),oup[len(oup) - 8:len(oup)]))
 
     elif (inp[0]=='je'):
-        opc = key('je')
-        maddr = addr.get(inp[1])
-        imm = intToBi(int(maddr))
-        oup = "00000000" + imm
-        imm1 = oup[len(oup) - 8:len(oup)]
-        print(E(opc, imm1))
+        oup = "00000000" + intToBi(int(addr.get(inp[1])))
+        print(E(key('je'),oup[len(oup) - 8:len(oup)]))
 
     ###         F
     elif (inp[0]=="hlt"):

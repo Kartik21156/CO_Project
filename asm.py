@@ -1,11 +1,7 @@
+import sys
 #reading the input file
 
-
-
 #opcodes
-from audioop import add
-from multiprocessing.sharedctypes import Value
-
 
 opcode = {"10000":"add",           #A
         "10001":"sub",             #A
@@ -38,9 +34,13 @@ reg = {"R0":"000",
     "R6":"110",
     "FLAGS":"111", }
 
-#semantics for instructions
+def codeChk(inp,opcode,reg,addr,i):
+    pass
 
-###
+
+
+
+#semantics for instructions
 
 #A(add sub mul xor or and)
 def A(opc,r1,r2,r3):
@@ -66,10 +66,6 @@ def E(opc,addr):
 def F():
     return "0101000000000000"               #5
 
-###
-
-#-#
-
 def intToBi(x):
     bi = bin(x)
     bi = bi.replace("0b","")
@@ -80,70 +76,29 @@ def key(val):
         if val == Value:
             return key
 
-
-####
-defconversion(inp,reg,addr):
+def conversion(inp,reg,addr):
+    ####        A
     if(inp[0]=="add"):
-        opc = key("add")
-        r1 = reg.get(inp[1])
-        r2 = reg.get(inp[2])
-        r3 = reg.get(inp[3])
-        print(A(opc,r1,r2,r3))
+        print(A(key("add"),reg.get(inp[1]),reg.get(inp[2]),reg.get(inp[3])))
     
-    elif():
-        pass
+    elif (inp[0]=="sub"):
+        print(A(key("sub"),reg.get(inp[1]),reg.get(inp[2]),reg.get(inp[3])))
 
-    elif (inp[0] == "sub"):
-        opc = key("sub")
-        r1 = reg.get(inp[1])
-        r2 = reg.get(inp[2])
-        r3 = reg.get(inp[3])
-        print(A(opc, r1, r2, r3))
+    elif (inp[0]=="mul"):
+        print(A(key("mul"),reg.get(inp[1]),reg.get(inp[2]),reg.get(inp[3])))
 
-    elif():
-        pass
+    elif (inp[0]=="xor"):
+        print(A(key("xor"),reg.get(inp[1]),reg.get(inp[2]),reg.get(inp[3])))
 
-    elif (inp[0] == "mul"):
-        opc = key("mul")
-        r1 = reg.get(inp[1])
-        r2 = reg.get(inp[2])
-        r3 = reg.get(inp[3])
-        print(A(opc, r1, r2, r3))
+    elif (inp[0]=="or"):
+        print(A(key("or"),reg.get(inp[1]),reg.get(inp[2]),reg.get(inp[3])))
 
-    elif():
-        pass
+    elif (inp[0]=="and"):
+        print(A(key("and"),reg.get(inp[1]),reg.get(inp[2]),reg.get(inp[3])))
 
-    elif (inp[0] == "xor"):
-        opc = key("xor")
-        r1 = reg.get(inp[1])
-        r2 = reg.get(inp[2])
-        r3 = reg.get(inp[3])
-        print(A(opc, r1, r2, r3))
-
-    elif():
-        pass
-
-    elif (inp[0] == "or"):
-        opc = key("or")
-        r1 = reg.get(inp[1])
-        r2 = reg.get(inp[2])
-        r3 = reg.get(inp[3])
-        print(A(opc, r1, r2, r3))
-
-    elif():
-        pass
-
-    elif (inp[0] == "and"):
-        opc = key("and")
-        r1 = reg.get(inp[1])
-        r2 = reg.get(inp[2])
-        r3 = reg.get(inp[3])
-        print(A(opc, r1, r2, r3))
-
-    elif():
-        pass
-
-    elif (inp[0] == "mov"):
+    ###                 B
+    ####        mov Imm and mov Reg
+    elif (inp[0]=="mov"):
         if ("$" in inp[2]):
             opc = "10010"
             r1 = reg.get(inp[1])
@@ -153,18 +108,191 @@ defconversion(inp,reg,addr):
             print(B(opc, r1, im1))
 
         else:
-            op = "10011"
+            opc = "10011"
             r1 = reg.get(inp[1])
             r2 = reg.get(inp[2])
-            print(C(op, r1, r2))
+            print(C(opc, r1, r2))
 
-    elif():
-        pass
+    elif (inp[0]=="rs"):
+        opc = key("rs")
+        r1 = reg.get(inp[1])
+        imm = intToBi(int(inp[2][1:len(inp[2])]))
+        oup = "00000000" + imm
+        im1 = oup[len(oup) - 8:len(oup)]
+        print(B(opc, r1, im1))
 
+    elif (inp[0]=="ls"):
+        opc = key("ls")
+        r1 = reg.get(oup[1])
+        imm = intToBi(int(oup[2][1:len(oup[2])]))
+        oup = "00000000" + imm
+        imm1 = oup[len(oup) - 8:len(oup)]
+        print(B(opc, r1, imm1))
     
+    ###             C
+    elif(inp[0]=="div"):
+        opc = key("div")
+        r3 = reg.get(inp[1])
+        r4 = reg.get(inp[2])
+        print(C(opc,r3,r4))
 
+    elif (inp[0]=='not'):
+        opc = key('not')
+        r1 = reg.get(inp[1])
+        r2 = reg.get(inp[2])
+        print(C(opc, r1, r2))
 
+    elif (inp[0]=='cmp'):
+        opc = key('cmp')
+        r1 = reg.get(inp[1])
+        r2 = reg.get(inp[2])
+        print(C(opc, r1, r2))
 
+    ###         D
+    elif (inp[0]=='ld'):
+        opc = key('ld')
+        r1 = reg.get(inp[1])
+        maddr = addr.get(inp[2])
+        imm = intToBi(int(maddr))
+        oup = "00000000" + imm
+        imm1 = oup[len(oup) - 8:len(oup)]
+        print(D(opc, r1, imm1))
 
+    elif (inp[0]=='st'):
+        opc = key('st')
+        r1 = reg.get(inp[1])
+        maddr = addr.get(inp[2])
+        imm = intToBi(int(maddr))
+        oup = "00000000" + imm
+        imm1 = oup[len(oup) - 8:len(oup)]
+        print(D(opc, r1, imm1))
 
+    ###         E
+    elif (inp[0]=='jmp'):
+        opc = key('jmp')
+        maddr = addr.get(inp[1])
+        imm = intToBi(int(maddr))
+        oup = "00000000" + imm
+        imm1 = oup[len(oup) - 8:len(oup)]
+        print(E(opc, imm1))
+
+    elif (inp[0]=='jlt'):
+        opc = key('jlt')
+        maddr = addr.get(inp[1])
+        imm = intToBi(int(maddr))
+        oup = "00000000" + imm
+        imm1 = oup[len(oup) - 8:len(oup)]
+        print(E(opc, imm1))
+
+    elif (inp[0]=='jgt'):
+        opc = key('jgt')
+        maddr = addr.get(inp[1])
+        imm = intToBi(int(maddr))
+        oup = "00000000" + imm
+        imm1 = oup[len(oup) - 8:len(oup)]
+        print(E(opc, imm1))
+
+    elif (inp[0]=='je'):
+        opc = key('je')
+        maddr = addr.get(inp[1])
+        imm = intToBi(int(maddr))
+        oup = "00000000" + imm
+        imm1 = oup[len(oup) - 8:len(oup)]
+        print(E(opc, imm1))
+
+    ###         F
+    elif (inp[0]=="hlt"):
+        print(F())
+
+    ###         FOR LABELS!!!
+
+    ###             A
+    elif (inp[0][-1]==":" and inp[1]=='add'):
+        print(A(key("add"),reg.get(inp[2]),reg.get(inp[3]),reg.get(inp[4])))
+
+    elif (inp[0][-1]==":" and inp[1]=='sub'):
+        print(A(key("sub"),reg.get(inp[2]),reg.get(inp[3]),reg.get(inp[4])))
+
+    elif (inp[0][-1]==":" and inp[1]=='mul'):
+        print(A(key("mul"),reg.get(inp[2]),reg.get(inp[3]),reg.get(inp[4])))
+
+    elif (inp[0][-1]==":" and inp[1]=='xor'):
+        print(A(key("xor"),reg.get(inp[2]),reg.get(inp[3]),reg.get(inp[4])))
+
+    elif (inp[0][-1]==":" and inp[1]=='or'):
+        print(A(key("or"),reg.get(inp[2]),reg.get(inp[3]),reg.get(inp[4])))
+
+    elif (inp[0][-1]==":" and inp[1]=='and'):
+        print(A(key("and"),reg.get(inp[2]),reg.get(inp[3]),reg.get(inp[4])))
+
+    ###             B
+
+    ###         mov Imm & mov reg
+    elif (inp[0][-1]==":" and inp[1]=="mov"):
+        if ("$" in inp[3]):
+            imm = intToBi(int(inp[3][1:len(inp[3])]))
+            oup = "00000000" + imm
+            imm1 = oup[len(oup) - 8:len(oup)]
+            print(B("00010",reg.get(inp[2]), imm1))
+
+        else:
+            print(C("00011",reg.get(inp[2]),reg.get(inp[3])))
+
+    elif (inp[0][-1]==":" and inp[0]=="rs"):
+        imm = intToBi(int(inp[3][1:len(inp[3])]))
+        oup = "00000000" + imm
+        imm1 = oup[len(oup) - 8:len(oup)]
+        print(B(key("rs"),reg.get(inp[2]), imm1))
+
+    elif (inp[0][-1]==":" and inp[0]=="ls"):
+        imm = intToBi(int(inp[3][1:len(inp[3])]))
+        oup = "00000000" + imm
+        imm1 = oup[len(oup) - 8:len(oup)]
+        print(B(key("ls"),reg.get(inp[2]), imm1))
+
+    ###             C
+    elif (inp[0][-1]==':' and inp[1]=="div"):
+        print(C(key('div'),reg.get(inp[2]),reg.get(inp[3])))
+
+    elif (inp[0][-1]==':' and inp[1]=="not"):
+        print(C(key('not'),reg.get(inp[2]),reg.get(inp[3])))
+
+    elif (inp[0][-1]==':' and inp[1]=="cmp"):
+        print(C(key('cmp'),reg.get(inp[2]),reg.get(inp[3])))
+
+    ###             D
+    elif (inp[0][-1]==':' and inp[1]=="ld"):
+        maddr = addr.get(inp[3])
+        oup = "00000000" + intToBi(int(maddr))
+        print(D(key('ld'),reg.get(inp[2]),oup[len(oup) - 8:len(oup)]))
+
+    elif (inp[0][-1]==':' and inp[1]=="st"):
+        maddr = addr.get(inp[3])
+        oup = "00000000" + intToBi(int(maddr))
+        print(D(key('st'),reg.get(inp[2]),oup[len(oup) - 8:len(oup)]))
+
+    ###             E
+    elif (inp[0][-1]==':' and inp[1]=='jmp'):
+        maddr = addr.get(inp[2])
+        oup = "00000000" + intToBi(int(maddr))
+        print(E(key('jmp'),oup[len(oup) - 8:len(oup)]))
+
+    elif (inp[0][-1]==':' and inp[1]=='jlt'):
+        maddr = addr.get(inp[2])
+        oup = "00000000" + intToBi(int(maddr))
+        print(E(key('jlt'),oup[len(oup) - 8:len(oup)]))
+
+    elif (inp[0][-1]==':' and inp[1]=='jgt'):
+        maddr = addr.get(inp[2])
+        oup = "00000000" + intToBi(int(maddr))
+        print(E(key('jgt'),oup[len(oup) - 8:len(oup)]))
+
+    elif (inp[0][-1]==':' and inp[1]=='je'):
+        maddr = addr.get(inp[2])
+        oup = "00000000" + intToBi(int(maddr))
+        print(E(key('je'),oup[len(oup) - 8:len(oup)]))
+
+    ###             F
+    elif(inp[0][-1]==":" and inp[1]=="hlt"):
+        print(F())
 

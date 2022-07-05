@@ -1,3 +1,4 @@
+from audioop import add
 import sys
 
 #opcodes
@@ -295,19 +296,18 @@ def conversion(inp,reg,addr):
     elif(inp[0][-1]==":" and inp[1]=="hlt"):
         print(F())
 
-
-
 inpt = []
 variables = []
 c_start = 0
 addr = {}
+code = True
 
 #reading the input file
 temp = sys.stdin.read().splitlines()
 for i in range(len(temp)):
     inpt.append(temp[i].split(" "))
 
-for i in range(len(inpt)):          #appending and skipping variables
+for i in range(len(inpt)):          #appending and skipping to variables
     if inpt[i][0] == "var":
         if len(inpt[i]) == 2:
             addr[inpt[i][1]] = len(inpt)-c_start+i
@@ -317,6 +317,14 @@ for i in range(len(inpt)):          #appending and skipping variables
         c_start = i
         break
 
-    
-for i in range(len(inpt)):
-    conversion(inpt[i],opcode,reg,addr)
+    if inpt[i][0][-1] == ":":       #appending labels for chking
+        addr[inpt[0][0:-1]] = i - c_start
+        variables.append(inpt[i][0][0:-1])
+
+
+
+
+
+if code == True:
+    for i in range(len(inpt)):
+        conversion(inpt[i],opcode,reg,addr)

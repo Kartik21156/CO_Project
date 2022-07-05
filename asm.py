@@ -31,6 +31,8 @@ reg = {"R0":"000",
     "R6":"110",
     "FLAGS":"111", }
 
+Reg = ("R0","R1","R2","R3","R4","R5","R6")
+
 A1 = ('add','sub','mul','xor','or','and')
 B1 = ('rs','ls')
 C1 = ('not','cmp','div')
@@ -171,7 +173,7 @@ def codeChk(inp,opcode,reg,addr,i):
                     return False
 
         #Flags
-        elif ("FLAGS" in inp):
+        elif ("FLAG" in inp):
             if (inp[0] == "mov"):
                 if len(inp) == 3:
                     if inp[2] in reg.keys():
@@ -443,7 +445,6 @@ code = True
 
 #reading the input file
 import fileinput
-from operator import le
 
 for line in fileinput.input():
     line = line.strip('\n')
@@ -537,9 +538,56 @@ for i in range(len(inpt)):                      #undefined var
                 code = False
                 exit()
 
+for i in range(c_start,len(inpt)):          #flags chk
+    if inpt[i][0] == 'mov':
+        if inpt[i][2] == 'FLAG':
+            if len(inpt) == 3:
+                if inpt[1] in Reg:
+                    pass
+                else:
+                    print("INVALID REG ",i+1)
+                    exit()
+            else:
+                print("FLAG SET not enough info to continue",i+1)
+                exit()
+    elif 'FLAG' in inpt[i]:
+        print("ILLEGEAL USE OF FLAGS",i+1)
+        exit()
+    
+    if inpt[i][0][-1] == ":":
+        if inpt[i][0] == 'mov':
+            if inpt[i][2] == 'FLAG':
+                if len(inpt) == 3:
+                    if inpt[1] in Reg:
+                        pass
+                    else:
+                        print("INVALID REG ",i+1)
+                        exit()
+                else:
+                    print("FLAG SET not enough info to continue",i+1)
+                    exit()
+        elif 'FLAG' in inpt[i]:
+            print("ILLEGEAL USE OF FLAGS",i+1)
+            exit()
 
-
-
+for i in range(c_start,len(inpt)):              #Imm chk
+    if (inpt[i][0] in B1 or (inpt[i][0] == 'mov' and '$' in inpt[i][2])):
+        a = int(inpt[i][2].strip('$'))
+        if a < 0:
+            print("Imm VALUE UNSUPPORTED",i+1)
+            exit()
+        elif a> 255:
+            print("Imm VALUE UNSUPPORTED",i+1)
+            exit()
+    if inpt[i][0][-1] == ":":
+        if (inpt[i][1] in B1 or (inpt[i][1] == 'mov' and '$' in inpt[i][3])):
+            a = int(inpt[i][3].strip('$'))
+            if a < 0:
+                print("Imm VALUE UNSUPPORTED",i+1)
+                exit()
+            elif a> 255:
+                print("Imm VALUE UNSUPPORTED",i+1)
+                exit()
 
 if code == True:
     for i in range(len(inpt)):

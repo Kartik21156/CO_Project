@@ -1,5 +1,4 @@
 import sys
-#reading the input file
 
 #opcodes
 
@@ -296,3 +295,28 @@ def conversion(inp,reg,addr):
     elif(inp[0][-1]==":" and inp[1]=="hlt"):
         print(F())
 
+
+
+inpt = []
+variables = []
+c_start = 0
+addr = {}
+
+#reading the input file
+temp = sys.stdin.read().splitlines()
+for i in range(len(temp)):
+    inpt.append(temp[i].split(" "))
+
+for i in range(len(inpt)):          #appending and skipping variables
+    if inpt[i][0] == "var":
+        if len(inpt[i]) == 2:
+            addr[inpt[i][1]] = len(inpt)-c_start+i
+            variables.append(inpt[i][1])
+
+    if inpt[i][0] != "var":
+        c_start = i
+        break
+
+    
+for i in range(len(inpt)):
+    conversion(inpt[i],opcode,reg,addr)

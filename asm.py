@@ -41,9 +41,8 @@ def key(val):
 
 def codeChk(inp,opcode,reg,addr,i):
     if inp[0][-1] != ":":
-        if y[0] not in opcode.values():
-
-    pass
+        if inp[0] not in opcode.values():
+            
 
 
 

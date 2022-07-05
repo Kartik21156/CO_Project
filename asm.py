@@ -82,7 +82,7 @@ def key(val):
 
 
 ####
-def conversion(inp,reg,addr):
+defconversion(inp,reg,addr):
     if(inp[0]=="add"):
         opc = key("add")
         r1 = reg.get(inp[1])

@@ -1,3 +1,4 @@
+from audioop import add
 import sys
 
 #opcodes
@@ -36,6 +37,8 @@ reg = {"R0":"000",
 A = ('add','sub','mul','xor','or','and')
 B = ('rs','ls')
 C = ('not','cmp','div')
+D = ('ld','st')
+E = ('jmp','jlt','jgt','je')
 
 def key(val):
     for key, value in opcode.items():
@@ -375,4 +378,31 @@ def codeChk(inp,opcode,reg,addr,i):
             else:
                 return True
 
-        #               Db
+        #               D
+        elif (inp[0] in D):
+            if len(inp) != 3:
+                print("SYNTAX ERROR",i+1)
+                return False
+            elif inp[1] not in reg.keys():
+                print("INVALID REGISTER",i+1)
+                return False
+            elif inp[2] not in reg.keys():
+                print("INVALID REGISTER",i+1)
+            
+            else:
+                return True
+        
+        #               E
+        elif (inp[0] in E):
+            if len[inp] != 2:
+                print("SYNTAX ERROR",i+1)
+                return False
+            elif inp[1] not in addr.keys():
+                print("INVALID MEM ADDR")
+                return False
+            else:
+                return True
+            
+        #               F
+        
+

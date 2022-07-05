@@ -276,3 +276,4 @@ def codeChk(inp,opcode,reg,addr,i):
                     print("Error in Variable declaration on line : ",i+1)
                     return False
     #Flags
+    

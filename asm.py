@@ -1,5 +1,3 @@
-from audioop import add
-from operator import le
 import sys
 
 #opcodes

@@ -116,22 +116,13 @@ def conversion(inp,reg,addr):
     
     ###             C
     elif(inp[0]=="div"):
-        opc = key("div")
-        r3 = reg.get(inp[1])
-        r4 = reg.get(inp[2])
-        print(C(opc,r3,r4))
+        print(C(key("div"),reg.get(inp[1]),reg.get(inp[2])))
 
     elif (inp[0]=='not'):
-        opc = key('not')
-        r1 = reg.get(inp[1])
-        r2 = reg.get(inp[2])
-        print(C(opc, r1, r2))
+        print(C(key('not'),reg.get(inp[1]),reg.get(inp[2])))
 
     elif (inp[0]=='cmp'):
-        opc = key('cmp')
-        r1 = reg.get(inp[1])
-        r2 = reg.get(inp[2])
-        print(C(opc, r1, r2))
+        print(C(key('cmp'),reg.get(inp[1]),reg.get(inp[2])))
 
     ###         D
     elif (inp[0]=='ld'):
@@ -210,8 +201,6 @@ def conversion(inp,reg,addr):
     elif (inp[0][-1]==":" and inp[1]=='and'):
         print(A(key("and"),reg.get(inp[2]),reg.get(inp[3]),reg.get(inp[4])))
 
-    ###             B
-
     ###         mov Imm & mov reg
     elif (inp[0][-1]==":" and inp[1]=="mov"):
         if ("$" in inp[3]):
@@ -223,6 +212,7 @@ def conversion(inp,reg,addr):
         else:
             print(C("00011",reg.get(inp[2]),reg.get(inp[3])))
 
+    ###             B
     elif (inp[0][-1]==":" and inp[0]=="rs"):
         imm = intToBi(int(inp[3][1:len(inp[3])]))
         oup = "00000000" + imm

@@ -3,6 +3,6 @@ mov R5 $10
 mov R4 $100
 mul R3 R1 R3
 st R3 y
+hlt
 label: mov R1 R2
 jlt label
-hlt

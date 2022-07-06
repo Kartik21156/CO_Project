@@ -467,16 +467,14 @@ for i in range(len(inpt)):          #appending variables
         addr[inpt[i][0][0:-1]] = i - c_start 
         labels.append(inpt[i][0][0:-1])
 
-print(addr)
 for i in range(len(inpt)):          #HLT CHK
-    if (inpt[i][0] == 'hltv' and i != len(inpt-1)):     
+    if (inpt[i][0] == 'hlt' and i != (len(inpt)-1)):     
         print("HLT NOT AT LAST",i+1)
         hltv = False
         exit()
 
 if inpt[len(inpt)-1][0] != 'hlt':       #HLT CHK
     print("LAST INSTRUCTION IS NOT HLT")
-    hltv = False
     exit()
 
 for i in range(c_start,len(inpt)):      #VAR AT START

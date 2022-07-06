@@ -483,9 +483,9 @@ for i in range(c_start,len(inpt)):      #VAR AT START
         code = False
         exit()
 
-for i in range(len(variables)):         # 2 SAME VAR
-    if variables.count(variables[i]) >1:
-        print("MORE THAN 1 VARIABLES WITH SAME NAME")
+for i in range(len(labels)):         # 2 SAME VAR
+    if labels.count(labels[i]) >1:
+        print("MORE THAN 1 LABEL WITH SAME NAME")
         code = False
         exit()
 

@@ -604,80 +604,79 @@ for i in range(c_start,len(inpt)):              #label chk
         
 for i in range(c_start,len(inpt)):
     if inpt[i][0][-1] == ":":
-        del inpt[0]
-        if inpt[i][0] in A1:
-            if len(inpt[i]) != 4:
+        if inpt[i][1] in A1:
+            if len(inpt[i]) != 5:
                 print("SYNTAX ERROR : ",i+1)
                 exit()
             else:
-                if inpt[i][1] not in Reg:
-                    print("INVALID REG",i+1)
-                    exit()
                 if inpt[i][2] not in Reg:
                     print("INVALID REG",i+1)
                     exit()
                 if inpt[i][3] not in Reg:
                     print("INVALID REG",i+1)
                     exit()
+                if inpt[i][4] not in Reg:
+                    print("INVALID REG",i+1)
+                    exit()
         
-        elif (inpt[i][0] in B1):
-                if len(inpt[i]) != 3:
+        elif (inpt[i][1] in B1):
+                if len(inpt[i]) != 4:
                     print("SYNTAX ERROR", i+1)
-                    exit()
-                elif inpt[i][1] not in reg.keys():
-                    print("INVALID REGISTER",i+1)
-                    exit()
-                elif inpt[i][2][0] != '$':
-                    print("INVALID IMMEDIATE VALUE",i+1)
-                    exit
-
-        elif (inpt[i][0] in C1):
-                if len(inpt) != 3:
-                    print("SYNTAX ERROR",i+1)
-                    exit()
-                elif inpt[i][1] not in reg.keys():
-                    print("INVALID REGISTER",i+1)
                     exit()
                 elif inpt[i][2] not in reg.keys():
                     print("INVALID REGISTER",i+1)
                     exit()
+                elif inpt[i][3][0] != '$':
+                    print("INVALID IMMEDIATE VALUE",i+1)
+                    exit
 
-        elif (inpt[i][0] in D1):
-                if len(inpt[i]) != 3:
+        elif (inpt[i][1] in C1):
+                if len(inpt) != 4:
                     print("SYNTAX ERROR",i+1)
                     exit()
-                elif inpt[i][1] not in reg.keys():
+                elif inpt[i][2] not in reg.keys():
                     print("INVALID REGISTER",i+1)
                     exit()
-                elif inpt[i][2] not in addr.keys():
-                    print("INVALID VARIABLE",i+1)
+                elif inpt[i][3] not in reg.keys():
+                    print("INVALID REGISTER",i+1)
                     exit()
 
-        elif (inpt[i][0] in E1):
-                if len(inpt) != 2:
+        elif (inpt[i][1] in D1):
+                if len(inpt[i]) != 4:
                     print("SYNTAX ERROR",i+1)
                     exit()
-                elif inpt[i][2] not in addr.keys():
+                elif inpt[i][2] not in reg.keys():
+                    print("INVALID REGISTER",i+1)
+                    exit()
+                elif inpt[i][3] not in addr.keys():
                     print("INVALID VARIABLE",i+1)
                     exit()
 
-        elif (inpt[i][0] == "hlt"):
+        elif (inpt[i][1] in E1):
+                if len(inpt) != 3:
+                    print("SYNTAX ERROR",i+1)
+                    exit()
+                elif inpt[i][3] not in addr.keys():
+                    print("INVALID VARIABLE",i+1)
+                    exit()
+
+        elif (inpt[i][1] == "hlt"):
                 if len(inpt[i]) != 1:
                     print("SYNTAX ERROR ",i+1)
                     exit()
 
-        elif inpt[i][0] == 'mov':
-            if len(inpt[i]) != 3:
+        elif inpt[i][1] == 'mov':
+            if len(inpt[i]) != 4:
                 print("SYNTAX ERROR",i+1)
                 exit()
             else:
-                if inpt[i][2][0] == '$':
-                    if inpt[i][1] not in Reg:
+                if inpt[i][3][0] == '$':
+                    if inpt[i][2] not in Reg:
                         print("INVALID REGISTER",i+1)
                         exit()
                 
-                elif inpt[i][1] in Reg:
-                    if inpt[i][2] not in Reg:
+                elif inpt[i][2] in Reg:
+                    if inpt[i][3] not in Reg:
                         print("INVALID REGISTER",i+1)
                     
                 else:

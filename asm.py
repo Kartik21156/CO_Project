@@ -444,6 +444,7 @@ min_val = 0
 code = True
 
 #reading the input file
+from cProfile import label
 import fileinput
 
 for line in fileinput.input():
@@ -463,9 +464,10 @@ for i in range(len(inpt)):          #appending variables
             variables.append(inpt[i][1])
 
     if inpt[i][0][-1] == ":":       #appending labels for chk
-        addr[inpt[i][0][0:-1]] = i - c_start
+        addr[inpt[i][0][0:-1]] = i - c_start 
         labels.append(inpt[i][0][0:-1])
 
+print(addr)
 for i in range(len(inpt)):          #HLT CHK
     if (inpt[i][0] == 'hltv' and i != len(inpt-1)):     
         print("HLT NOT AT LAST",i+1)
@@ -525,8 +527,8 @@ for i in range(len(inpt)):                      #undefined var
                 print("USE OF UNDECLARED VARIABLE",i+1)
                 exit()
         elif inpt[i][1] in E1:
-            if inpt[i][2] not in variables:
-                print("USE OF UNDECLARED VARIABLE",i+1)
+            if inpt[i][2] not in labels:
+                print("INCORRECT USAGE OF JUMP ADDR",i+1)
                 code = False
                 exit()
     else:
@@ -540,8 +542,8 @@ for i in range(len(inpt)):                      #undefined var
                 code = False
                 exit()
         elif inpt[i][0] in E1:
-            if inpt[i][1] not in variables:
-                print("USE OF UNDECLARED VARIABLE",i+1)
+            if inpt[i][1] not in labels:
+                print("UINCORRECT USAGE OF JUMP ADDR",i+1)
                 code = False
                 exit()
 
@@ -631,7 +633,7 @@ for i in range(c_start,len(inpt)):
                     exit
 
         elif (inpt[i][1] in C1):
-                if len(inpt) != 4:
+                if len(inpt[i]) != 4:
                     print("SYNTAX ERROR",i+1)
                     exit()
                 elif inpt[i][2] not in reg.keys():
@@ -653,11 +655,11 @@ for i in range(c_start,len(inpt)):
                     exit()
 
         elif (inpt[i][1] in E1):
-                if len(inpt) != 3:
+                if len(inpt[i]) != 3:
                     print("SYNTAX ERROR",i+1)
                     exit()
-                elif inpt[i][3] not in addr.keys():
-                    print("INVALID VARIABLE",i+1)
+                elif inpt[i][2] not in labels:
+                    print("INVALID LABEL",i+1)
                     exit()
 
         elif (inpt[i][1] == "hlt"):
@@ -710,7 +712,7 @@ for i in range(c_start,len(inpt)):
                     exit
 
         elif (inpt[i][0] in C1):
-                if len(inpt) != 3:
+                if len(inpt[i]) != 3:
                     print("SYNTAX ERROR",i+1)
                     exit()
                 elif inpt[i][1] not in reg.keys():
@@ -726,17 +728,17 @@ for i in range(c_start,len(inpt)):
                     exit()
                 elif inpt[i][1] not in reg.keys():
                     print("INVALID REGISTER",i+1)
-                    exit()
+                    exit()                            
                 elif inpt[i][2] not in addr.keys():
                     print("INVALID VARIABLE",i+1)
                     exit()
 
         elif (inpt[i][0] in E1):
-                if len(inpt) != 2:
+                if len(inpt[i]) != 2:
                     print("SYNTAX ERROR",i+1)
                     exit()
-                elif inpt[i][2] not in addr.keys():
-                    print("INVALID VARIABLE",i+1)
+                elif inpt[i][1] not in labels:
+                    print("INVALID LABEL",i+1)
                     exit()
 
         elif (inpt[i][0] == "hlt"):

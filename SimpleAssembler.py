@@ -31,7 +31,7 @@ reg = {"R0":"000",
     "R6":"110",
     "FLAGS":"111", }
 
-Reg = ("R0","R1","R2","R3","R4","R5","R6")
+Reg = ("R0","R1","R2","R3","R4","R5","R6","FLAGS")
 
 A1 = ('add','sub','mul','xor','or','and')
 B1 = ('rs','ls')
@@ -98,7 +98,7 @@ def conversion(inp,reg,addr):
     
     ###             C
     elif(inp[0] in C1):
-        print(C(key(i[0]),reg.get(inp[1]),reg.get(inp[2])))
+        print(C(key(inp[0]),reg.get(inp[1]),reg.get(inp[2])))
 
     ###         D
     elif (inp[0] in D1):
@@ -204,6 +204,7 @@ def codeChk(inp,opcode,reg,addr,i):
         elif (inp[0] == 'mov'):
             if len(inp) != 3:
                 print("SNYTAX ERROR",i+1)
+                
                 return False
             else:
                 if inp[2][0] == '$':
@@ -473,9 +474,15 @@ for i in range(len(inpt)):          #HLT CHK
         hltv = False
         exit()
 
-if inpt[len(inpt)-1][0] != 'hlt':       #HLT CHK
-    print("LAST INSTRUCTION IS NOT HLT")
-    exit()
+if inpt[len(inpt)-1][0][-1] == ":":
+    if inpt[len(inpt)-1][1] != 'hlt':       #HLT CHK
+        print("LAST INSTRUCTION IS NOT HLT")
+        exit()
+
+if inpt[len(inpt)-1][0][-1] != ":":
+    if inpt[len(inpt)-1][0] != 'hlt':       #HLT CHK
+        print("LAST INSTRUCTION IS NOT HLT")
+        exit()
 
 for i in range(c_start,len(inpt)):      #VAR AT START
     if inpt[i][0] == 'var':
@@ -492,6 +499,7 @@ for i in range(len(labels)):         # 2 SAME VAR
 for i in range(c_start,len(inpt)):      #TYPO in instructions and undefined labels
     if inpt[i][0][-1] == ":":
         if inpt[i][1] not in opcode.values():
+
             print("SYNTAX ERROR ",i+1)
             code = False
             exit()
@@ -654,16 +662,17 @@ for i in range(c_start,len(inpt)):
 
         elif (inpt[i][1] in E1):
                 if len(inpt[i]) != 3:
-                    print("SYNTAX ERROR",i+1)
+                    print("SYNTAX sERROR",i+1)
                     exit()
                 elif inpt[i][2] not in labels:
                     print("INVALID LABEL",i+1)
                     exit()
 
         elif (inpt[i][1] == "hlt"):
-                if len(inpt[i]) != 1:
-                    print("SYNTAX ERROR ",i+1)
-                    exit()
+            if inpt[i][0][-1] != ":":
+                    if len(inpt[i]) != 1:
+                        print("SYNTAX ERROR ",i+1)
+                        exit()
 
         elif inpt[i][1] == 'mov':
             if len(inpt[i]) != 4:

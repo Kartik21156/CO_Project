@@ -451,7 +451,9 @@ import fileinput
 for line in fileinput.input():
     line = line.strip('\n')
     line = line.split()
-    inpt.append(line)
+    
+    if line != []:
+        inpt.append(line)
 
 for i in range(len(inpt)):          #skipping to variables
     if inpt[i][0] != "var":

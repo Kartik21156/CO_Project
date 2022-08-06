@@ -1,6 +1,10 @@
 #opcodes
 
-opcode = {"10000":"add",           #A
+opcode = {
+        "00000":"addf",            #A
+        "00001":"subf",            #A
+        "00010":"movf",            #B mov imm
+        "10000":"add",             #A
         "10001":"sub",             #A
         "10010":"mov",             #B mov imm
         "10011":"mov",             #C mov reg
@@ -74,6 +78,20 @@ def intToBi(x):
     bi = bin(x)
     bi = bi.replace("0b","")
     return bi
+
+def floating_point(x):
+    sdfg = str(x)
+    sdfg = sdfg[::-1]
+    stri = str(x)
+    dec = 0
+    for j in range(len(sdfg)):
+        if sdfg[j] == '.':
+            break
+        dec = dec + 1
+
+    exp = intToBi(dec)
+    mantis = stri.replace('.','')
+
 
 def conversion(inp,reg,addr):
     if inp[0] in labels:
